@@ -1,0 +1,312 @@
+# Spatial Autocorrelation Analysis
+
+Considering the spatial lags of variables, variables in neighboring geographical units could be calculated, following the first order queen contiguity strategy, which classifies neighbors of geographical units by the sharing of either point or line segment borders. Followed by that, Global Moran’s I and Local Moran’s I statistics for charge points in London could be conducted. 
+
+
+## Run Global Moran's I
+
+### Function to calculate the centroids
+
+```{r}
+# library(spdep)
+# First calculate the centroids of all Wards in London
+
+coordsWfun <- function(londonpointsyear){
+  points_wards <- pointsjoinedfun(londonpointsyear)
+  coordsW <- points_wards %>% 
+    st_centroid() %>%
+    st_geometry()
+}
+
+```
+```{r}
+# test
+coordsW <- coordsWfun(londonpoints2020)
+plot(coordsW,axes=TRUE)
+```
+
+
+### Function to create a neighbours list
+
+```{r}
+#create a neighbours list
+ward_nbfun <- function(londonpointsyear){
+  points_wards <- pointsjoinedfun(londonpointsyear)
+  ward_nb <- points_wards %>% 
+    poly2nb(., queen=T)
+  return(ward_nb)
+}
+
+```
+```{r}
+# test
+ward_nb20 <- ward_nbfun(londonpoints2020)
+plot(ward_nb20, st_geometry(coordsW), col="red")
+# add a map underneath
+points_wards <- pointsjoinedfun(londonpoints2020) 
+plot(points_wards$geometry, add=T)
+```
+
+### Function to create spatial weights
+
+```{r}
+#create a spatial weights object from these weights
+ward_lwfun <- function(londonpointsyear){
+  ward_lw <- ward_nbfun(londonpointsyear) %>% 
+    nb2listw(., style="C")
+  return(ward_lw)
+}
+```
+```{r}
+# test
+ward_lw20 <- ward_lwfun(londonpoints2020)
+head(ward_lw20$neighbours)
+```
+
+
+### Function to run Global Moran's I
+
+```{r}
+I_ward_globalfun <- function(londonpointsyear){
+  ward_lw <- ward_lwfun(londonpointsyear)
+  
+  I_ward_global <- londonpointsyear %>% 
+    pointsjoinedfun(.) %>% 
+    pull(density) %>%
+    as.vector()%>% # Converts a distributed matrix into a non-distributed vector
+    moran.test(., ward_lw) # density <-> spatial (similar or not)
+  return(I_ward_global)
+}
+
+```
+
+
+### Global Moran's I for 2018, 2019, 2020
+
+```{r}
+I_ward_global18 <- I_ward_globalfun(londonpoints2018)
+I_ward_global19 <- I_ward_globalfun(londonpoints2019)
+I_ward_global20 <- I_ward_globalfun(londonpoints2020)
+
+```
+```{r}
+I_ward_global18
+I_ward_global19
+I_ward_global20
+
+```
+
+
+## Run Local Moran's I
+
+### Function to run Local Moran's I
+
+```{r}
+ward_lw20 <- ward_lwfun(londonpoints2020)
+  
+  I_ward_local_count <- londonpoints2020 %>% 
+    pointsjoinedfun(.) %>% 
+    pull(chargepointcount) %>%
+    as.vector()%>% 
+    localmoran(., ward_lw20) %>% 
+    as_tibble()
+  I_ward_local_density <- londonpoints2020 %>% 
+    pointsjoinedfun(.) %>% 
+    pull(density) %>%
+    as.vector()%>% 
+    localmoran(., ward_lw20) %>% 
+    as_tibble()
+
+slice_head(I_ward_local_count, n=5)
+slice_head(I_ward_local_density, n=5)
+```
+
+
+```{r}
+# use the local moran function to generate I for each ward in the city
+
+I_ward_localfun <- function(londonpointsyear){
+  ward_lw <- ward_lwfun(londonpointsyear)
+  
+  I_ward_local_count <- londonpointsyear %>% 
+    pointsjoinedfun(.) %>% 
+    pull(chargepointcount) %>%
+    as.vector()%>% 
+    localmoran(., ward_lw) %>% 
+    as_tibble()
+  I_ward_local_density <- londonpointsyear %>% 
+    pointsjoinedfun(.) %>% 
+    pull(density) %>%
+    as.vector()%>% 
+    localmoran(., ward_lw) %>% 
+    as_tibble()
+  
+  tm_local_moran <- londonpointsyear %>% 
+    pointsjoinedfun(.) %>%
+    mutate(charge_count_I = as.numeric(I_ward_local_count$Ii))%>%
+    mutate(charge_count_Iz =as.numeric(I_ward_local_count$Z.Ii))%>%
+    mutate(density_I =as.numeric(I_ward_local_density$Ii))%>%
+    mutate(density_Iz =as.numeric(I_ward_local_density$Z.Ii))
+  
+  return(tm_local_moran)
+}
+
+```
+
+
+### Function to run tmap for Local Moran's I
+
+```{r}
+tmap_local_moranfun <- function(londonpointsyear, number, mode){
+  breaks1<-c(-1000,-2.58,-1.96,-1.65,1.65,1.96,2.58,1000)
+  MoranColours<- rev(brewer.pal(8, "RdBu"))
+  tm_local_moran <- I_ward_localfun(londonpointsyear)
+  tmap_mode(mode)
+  tmap <- tm_shape(tm_local_moran) +
+    tm_polygons("charge_count_Iz",
+        style="fixed",
+        breaks=breaks1,
+        palette=MoranColours,
+        midpoint=NA)+
+    tm_legend(show=FALSE)+
+    tm_layout(frame=FALSE)+
+    tm_credits(number, position=c(0,0.85), size=1)
+  return(tmap)
+}
+```
+```{r}
+tmap_moranlegendfun <- function(londonpointsyear){
+  breaks1<-c(-1000,-2.58,-1.96,-1.65,1.65,1.96,2.58,1000)
+  MoranColours<- rev(brewer.pal(8, "RdBu"))
+  tm_local_moran <- I_ward_localfun(londonpointsyear)
+  legend <- tm_shape(tm_local_moran) +
+    tm_polygons("charge_count_Iz",
+                breaks=breaks1,
+                palette=MoranColours,
+                title="Local Moran's I, Charge Points in London") +
+    tm_scale_bar(position=c(0.1,0.04), text.size=0.6)+
+    tm_compass(north=0, position=c(0.65,0.2))+
+   
+    tm_layout(title = "Charge Points Local Moran's I", 
+              legend.title.size=1,
+              legend.text.size = 0.6,
+              legend.only = TRUE, 
+              legend.position=c(0.1,0.25),asp=0.1)
+  
+  return(legend)
+}
+```
+
+
+```{r}
+tm_local_moran18 <- tmap_local_moranfun(londonpoints2018, "a)", "plot")
+tm_local_moran19 <- tmap_local_moranfun(londonpoints2019, "b)", "plot")
+tm_local_moran20 <- tmap_local_moranfun(londonpoints2020, "c)", "plot")
+```
+```{r}
+moran_legend <- tmap_moranlegendfun(londonpoints2020)
+
+local_moran <- tmap_arrange(tm_local_moran18, 
+                            tm_local_moran19, 
+                            tm_local_moran20, 
+                            moran_legend, ncol=2)
+local_moran
+```
+
+```{r}
+tmap_save(local_moran, "pic/Local Moran's I, Charge Points in London.png",width=7, height=4)
+```
+```{r}
+tm_local_moran18v <- tmap_local_moranfun(londonpoints2018, "a)", "view")
+tm_local_moran19v <- tmap_local_moranfun(londonpoints2019, "b)", "view")
+tm_local_moran20v <- tmap_local_moranfun(londonpoints2020, "c)", "view")
+```
+```{r}
+moran_legend <- tmap_moranlegendfun(londonpoints2020)
+
+local_moran <- tmap_arrange(tm_local_moran18v, 
+                            tm_local_moran19v, 
+                            tm_local_moran20v, ncol=1)
+local_moran
+```
+
+
+### Function to run Gi*
+
+```{r}
+Gi_ward_local_densityfun <- function(londonpointsyear){
+  ward_lw <- ward_lwfun(londonpointsyear)
+  
+  Gi_ward_local_density <- londonpointsyear %>% 
+    pointsjoinedfun(.) %>% 
+    pull(density) %>%
+    as.vector()%>%
+    localG(., ward_lw)
+  
+  density_Gi <- londonpointsyear %>% 
+    pointsjoinedfun(.) %>% 
+    mutate(density_G = as.numeric(Gi_ward_local_density))
+  
+  return(density_Gi)
+}
+```
+
+
+### Function to run tmap for Gi*
+
+```{r}
+tmap_Gifun <- function(londonpointsyear, number, mode){
+  breaks1<-c(-1000,-2.58,-1.96,-1.65,1.65,1.96,2.58,1000)
+  GIColours<- rev(brewer.pal(8, "RdBu"))
+  density_Gi <- Gi_ward_local_densityfun(londonpointsyear)
+  tmap_mode(mode)
+  tmap <- tm_shape(density_Gi) +
+    tm_polygons("density_G",
+                breaks=breaks1,
+                palette=GIColours,
+                title="Gi*, Charge Points in London") +
+    tm_legend(show=FALSE)+
+    tm_layout(frame=FALSE)+
+    tm_credits(number, position=c(0,0.85), size=1)
+  
+  return(tmap)
+}
+```
+
+```{r}
+G1 <- tmap_Gifun(londonpoints2018, "a)", "plot")
+G2 <- tmap_Gifun(londonpoints2019, "b)", "plot")
+G3 <- tmap_Gifun(londonpoints2020, "c)", "plot")
+```
+
+```{r}
+tmap_Gilegendfun <- function(londonpointsyear){
+  breaks1<-c(-1000,-2.58,-1.96,-1.65,1.65,1.96,2.58,1000)
+  GIColours<- rev(brewer.pal(8, "RdBu"))
+  density_Gi <- Gi_ward_local_densityfun(londonpointsyear)
+  legend <- tm_shape(density_Gi) +
+    tm_polygons("density_G",
+                breaks=breaks1,
+                palette=GIColours,
+                title="Gi*, Charge Points in London") +
+    tm_scale_bar(position=c(0.1,0.04), text.size=0.6)+
+    tm_compass(north=0, position=c(0.65,0.2))+
+   
+    tm_layout(title = "Charge Points Gi* Density", 
+              legend.title.size=1,
+              legend.text.size = 0.6,
+              legend.only = TRUE, 
+              legend.position=c(0.1,0.25),asp=0.1)
+  
+  return(legend)
+}
+```
+```{r}
+Gi_legend <- tmap_Gilegendfun(londonpoints2020)
+
+Gi <- tmap_arrange(G1, G2, G3, Gi_legend, ncol=2)
+Gi
+```
+```{r}
+tmap_save(local_moran, "pic/Gi, Charge Points in London.png",width=7, height=4)
+```

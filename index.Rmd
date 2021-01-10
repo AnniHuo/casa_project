@@ -1,9 +1,84 @@
 --- 
-title: "YOUR TITLE HERE"
-author: "YOUR NAME HERE"
+title: "Research on Charging Facility Distribution in London"
+author: "Anni Huo"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
 
-# Down the rabbit-hole
+# Data Source
+
+## NCR dataset
+
+Accessing and adding data on the National ChargePoint Registry (NCR) on public electric vehicle ChargePoint in the UK (.csv):
+https://www.gov.uk/guidance/find-and-use-data-on-public-electric-vehicle-chargepoints#accessing-data-on-ncr
+
+The NCR is a database of publicly-available chargepoints for electric vehicles in the UK established in 2011. Whilst the database is freely open to all who wish to use the database, the main data users are business data users for their products (e.g. smartphone apps, satellite navigation and route planning).
+
+
+ NCR content 
+
+	
+	▪ registry - Charge Point Registry
+	
+	▪ type - Connector Types
+	
+	▪ bearing - Bearings
+	
+	▪ method - Charging Methods
+	
+	▪ mode - Charge Modes
+	
+	▪ status - Connector Statuses
+	
+	
+## Ward Profiles and Atlas (2015)
+
+Greater London Authority (GLA)
+website:https://data.london.gov.uk/dataset/ward-profiles-and-atlas
+
+The ward profiles and ward atlas provide a range of demographic and related data for each ward in Greater London. They are designed to provide an overview of the population in these small areas by presenting a range of data on the population, diversity, households, life expectancy, housing, crime, benefits, land use, deprivation, and employment.
+
+ Ward profile content 
+
+  ▪ population density
+	
+	▪ car use
+	
+	▪ employment and economic activity
+	
+	▪ average house prices
+	
+	▪ road casualties
+	
+	▪ public transport accessibility (PTALs)
+
+
+
+## Households of London Wards
+
+Provide the dataset involving total number of households by wards in London
+website:https://data.london.gov.uk/dataset/households-household-type-2001-ward
+
+
+## Shape file of the major road network
+
+Local authority traffic figures give the total volume of traffic across each local authority for the whole year. 
+Parking data is contained in the dataset
+website:https://roadtraffic.dft.gov.uk/downloads
+
+## Land Use by Borough and Ward
+
+
+Land Use Statistics by ward (Generalised Land Use Database) 2005 (Enhanced Base map). Uses include, domestic buildings, gardens, non-domestic buildings, greenspace, paths, rail, road and water. Area is presented in Thousands of square metres ('000s m2). These are experimental Statistics - this information has been developed in accordance with the principles set out in the National Statistics Code of Practice but has yet to be fully accredited as a National Statistic.
+
+website:https://data.london.gov.uk/dataset/land-use-ward
+
+ Land use dataset content 
+
+  ▪ persentage of residential area
+	
+	▪ persentage of road area
+	
+	▪ persentage of rail area
+	
 

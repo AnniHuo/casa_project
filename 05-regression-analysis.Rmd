@@ -1,0 +1,602 @@
+
+
+# Regression Analysis
+
+In order to forecast charging facility location selection for future, the following part will compare the charge points registration distribution with other characteristics mentioned above, including land-use, travel-related and socio-demographic characteristics, applying ordinary least squares (OLS) regression models. In order to achieve higher accuracy for the results, Spatial Lag Model (SLM) which involves a separate spatially lagged variant of the dependent variable as an independent variable of the model, as well as Spatial Error Model (SEM) which incorporates a spatial lag of the OLS regression model’s residual as an independent variable, all participate in the comparison.
+
+## Ordinary Least Squares (OLS) regression model
+
+Find the specific relationship between those different variables
+
+```{r}
+# regression model
+model1 <- lm(log(userate) ~
+               employment_rate+
+               log(houseprice)+
+               log(publictransaccess_score)+
+               log(parking_density)+
+               residential_percentage+
+               road_percentage, 
+             data = independent)
+```
+```{r}
+#show the summary of those outputs
+summary(model1)
+glance(model1)
+```
+```{r}
+m1_tidy <- model1 %>% 
+  tidy() 
+m1_tidy
+```
+```{r}
+# regression model
+model2 <- lm(log(density) ~ 
+               employment_rate+
+               log(houseprice)+
+               log(publictransaccess_score)+
+               log(parking_density)+
+               residential_percentage+
+               road_percentage, 
+             data = characters)
+```
+```{r}
+#show the summary of those outputs
+summary(model2)
+glance(model2)
+```
+
+## Assumptions Underpinning Linear Regression
+
+### Assumption 1 - There is a linear relationship between the dependent and independent variables
+
+```{r}
+multiplot(lp1, lp2, p4, lp5, lp6, lp7, p9, p10, cols = 3)
+```
+
+### Assumption 2 - The residuals in your model should be normally distributed
+
+```{r}
+#save the residuals into dataframe
+
+model1_data <- model1 %>%
+  augment(., independent)
+
+#plot residuals
+model1_data%>%
+dplyr::select(.resid)%>%
+  pull()%>%
+  qplot()+ 
+  geom_histogram() 
+```
+```{r}
+#save the residuals into dataframe
+
+model2_data <- model2 %>%
+  augment(., independent)
+
+#plot residuals
+model2_data%>%
+dplyr::select(.resid)%>%
+  pull()%>%
+  qplot()+ 
+  geom_histogram() 
+```
+
+
+### Assumption 3 - No Multicolinearity in the independent variables
+
+```{r}
+position <- c(2:9)
+
+Correlation_all<- independent %>%
+  dplyr::select(position)%>%
+    correlate()
+Correlation_all
+```
+```{r}
+position <- c(4:9)
+
+Correlation<- independent %>%
+  dplyr::select(position)%>%
+  dplyr::rename(ER="employment_rate",
+         HP="houseprice",
+         PS="publictransaccess_score",
+         PD="parking_density",
+         RSP="residential_percentage",
+         RP="road_percentage"
+         ) %>% 
+    correlate()
+r <- rplot(Correlation, shape = 15,colours = c("skyblue1", "white", "indianred2"))
+r
+```
+```{r}
+png(filename = "pic/correlation.png", 
+    width = 500, height = 500)     
+r
+dev.off()
+```
+
+
+### Assumption 4 - Homoscedasticity
+
+```{r}
+par(mfrow=c(2,2)) 
+plot(model1)
+```
+```{r}
+par(mfrow=c(2,2)) 
+plot(model2)
+```
+
+### Assumption 5 - Independence of Errors
+
+```{r}
+#run durbin-watson test m1
+DW1 <- durbinWatsonTest(model1)
+tidy(DW1)
+```
+
+```{r}
+#run durbin-watson test m2
+DW2 <- durbinWatsonTest(model2)
+tidy(DW2)
+```
+
+```{r}
+residuals <- londonwards %>% 
+  mutate(model1residual = residuals(model1)) %>% 
+  mutate(model2residual = residuals(model2))
+```
+
+```{r}
+#plot the residuals m1
+tmap_mode("view")
+qtm(residuals, fill = "model1residual")
+
+```
+```{r}
+#plot the residuals m2
+tmap_mode("view")
+qtm(residuals, fill = "model2residual")
+```
+
+### Moran's I test for residuals (generally)
+
+```{r}
+coordsW <- residuals %>% 
+    st_centroid() %>%
+    st_geometry()
+```
+```{r}
+# queen
+queen_nb <- residuals %>%
+  poly2nb(., queen=T)
+
+# k nearest neighbours
+knn_nb <-coordsW %>%
+  knearneigh(., k=9)%>%
+  knn2nb()
+```
+
+```{r}
+#create spatial weights matrix 
+
+queens_weight <- queen_nb %>%
+  nb2listw(., style="C")
+
+knn_weight <- knn_nb %>%
+  nb2listw(., style="C")
+```
+
+```{r}
+Queen1 <- residuals %>%
+  st_drop_geometry()%>%
+  dplyr::select(model1residual)%>%
+  pull()%>%
+  moran.test(., queens_weight)%>%
+  tidy()
+Queen1
+```
+
+```{r}
+Knn1 <- residuals %>%
+  st_drop_geometry()%>%
+  dplyr::select(model1residual)%>%
+  pull()%>%
+  moran.test(., knn_weight)%>%
+  tidy()
+Knn1
+```
+
+```{r}
+Queen2 <- residuals %>%
+  st_drop_geometry()%>%
+  dplyr::select(model2residual)%>%
+  pull()%>%
+  moran.test(., queens_weight)%>%
+  tidy()
+Queen2
+```
+
+```{r}
+Knn2 <- residuals %>%
+  st_drop_geometry()%>%
+  dplyr::select(model2residual)%>%
+  pull()%>%
+  moran.test(., knn_weight)%>%
+  tidy()
+Knn2
+```
+
+## Spatial Regression Models
+
+### Spatial Lag models for Model 1 (queen)
+
+
+```{r}
+lag_model1_queen <- lagsarlm(log(userate) ~
+                               employment_rate+
+                               log(houseprice)+
+                               log(publictransaccess_score)+
+                               log(parking_density)+
+                               residential_percentage+
+                               road_percentage,
+                             data = independent, 
+                             nb2listw(queen_nb, style="C"), 
+                             method = "eigen")
+
+tidy(lag_model1_queen)
+glance(lag_model1_queen)
+```
+
+### Spatial Lag models for Model 2 (queen)
+
+```{r}
+lag_model2_queen <- lagsarlm(log(density) ~
+                               employment_rate+
+                               log(houseprice)+
+                               log(publictransaccess_score)+
+                               log(parking_density)+
+                               residential_percentage+
+                               road_percentage,
+                             data = independent, 
+                             nb2listw(queen_nb, style="C"), 
+                             method = "eigen")
+
+tidy(lag_model2_queen)
+glance(lag_model2_queen)
+```
+
+### Spatial Error models for Model 1 (queen)
+
+```{r}
+error_model1_queen <- errorsarlm(log(userate) ~
+                                   employment_rate+
+                                   log(houseprice)+
+                                   log(publictransaccess_score)+
+                                   log(parking_density)+
+                                   residential_percentage+
+                                   road_percentage,
+                                 data = independent, 
+                                 nb2listw(queen_nb, style="C"), 
+                                 method = "eigen")
+
+tidy(error_model1_queen)
+glance(error_model1_queen)
+```
+
+### Spatial Error models for Model 2 (queen)
+
+```{r}
+error_model2_queen <- errorsarlm(log(density) ~
+                                   employment_rate+
+                                   log(houseprice)+
+                                   log(publictransaccess_score)+
+                                   log(parking_density)+
+                                   residential_percentage+
+                                   road_percentage,
+                                 data = independent, 
+                                 nb2listw(queen_nb, style="C"), 
+                                 method = "eigen")
+
+tidy(error_model2_queen)
+glance(error_model2_queen)
+```
+
+
+
+### Find best k for KNN strategy
+
+Use for loop to find the best k (1 to 10) for those Spatial Regression Models, and summarize the best k values, corresponding R-squared and AIC, so that they can be compared and the better results can be identified for further analysis.
+
+#### The k for Spatial Lag Model 1
+
+
+```{r}
+r_squared <- list()
+best_k <- list()
+AIC <- list()
+# create empty variable to store fit
+k <- NA
+a <- NA
+  
+# run the k-means 10 times
+for (i in 1:10){
+  
+  # keep track of the runs
+  print(paste0('starting run: k = ', i))
+  coordsW <- residuals %>% 
+    st_centroid() %>%
+    st_geometry()
+  knn_nb <-coordsW %>%
+  knearneigh(., k=i)%>%
+  knn2nb()
+  
+  knn_weight <- knn_nb %>%
+  nb2listw(., style="C")
+  
+  lag_model1_knni <- lagsarlm(log(userate) ~
+                              employment_rate+
+                              log(houseprice)+
+                              log(publictransaccess_score)+
+                              log(parking_density)+
+                              residential_percentage+
+                              road_percentage,
+                            data = independent, 
+                            nb2listw(knn_nb, style="C"), 
+                            method = "eigen")
+
+  k[i] <- glance(lag_model1_knni)[[1]]
+  a[i] <- glance(lag_model1_knni)[[2]]
+  
+  # update the results of the clustering if the total within sum of squares for the run
+  # is lower than any of the runs that have been executed so far 
+  if (k[i] > max (k[1:(i-1)])){
+    r_squared <- k[i]
+    best_k <- i
+    AIC <- a[i]}
+}
+
+```
+```{r}
+r_squared 
+best_k 
+AIC
+```
+
+#### The k for Spatial Lag Model 2
+
+```{r}
+r_squared2 <- list()
+best_k2 <- list()
+AIC2 <- list()
+# create empty variable to store fit
+k <- NA
+a <- NA
+  
+# run the k-means 10 times
+for (i in 1:10){
+  
+  # keep track of the runs
+  print(paste0('starting run: k = ', i))
+  coordsW <- residuals %>% 
+    st_centroid() %>%
+    st_geometry()
+  knn_nb <-coordsW %>%
+  knearneigh(., k=i)%>%
+  knn2nb()
+  
+  knn_weight <- knn_nb %>%
+  nb2listw(., style="C")
+  
+  lag_model2_knni <- lagsarlm(log(density) ~
+                              employment_rate+
+                              log(houseprice)+
+                              log(publictransaccess_score)+
+                              log(parking_density)+
+                              residential_percentage+
+                              road_percentage,
+                            data = independent, 
+                            nb2listw(knn_nb, style="C"), 
+                            method = "eigen")
+
+  k[i] <- glance(lag_model2_knni)[[1]]
+  a[i] <- glance(lag_model2_knni)[[2]]
+  
+  # update the results of the clustering if the total within sum of squares for the run
+  # is lower than any of the runs that have been executed so far 
+  if (k[i] > max (k[1:(i-1)])){
+    r_squared2 <- k[i]
+    best_k2 <- i
+    AIC2 <- a[i]}
+}
+
+```
+```{r}
+r_squared2
+best_k2 
+AIC2
+```
+
+
+#### The k for Spatial Error Model 1
+
+
+```{r}
+r_squared3 <- list()
+best_k3 <- list()
+AIC3 <- list()
+# create empty variable to store fit
+k <- NA
+a <- NA
+  
+# run the k-means 10 times
+for (i in 1:10){
+  
+  # keep track of the runs
+  print(paste0('starting run: k = ', i))
+  coordsW <- residuals %>% 
+    st_centroid() %>%
+    st_geometry()
+  knn_nb <-coordsW %>%
+  knearneigh(., k=i)%>%
+  knn2nb()
+  
+  knn_weight <- knn_nb %>%
+  nb2listw(., style="C")
+  
+  error_model1_knni <- errorsarlm(log(userate) ~
+                                  employment_rate+
+                                  log(houseprice)+
+                                  log(publictransaccess_score)+
+                                  log(parking_density)+
+                                  residential_percentage+
+                                  road_percentage,
+                                data = independent, 
+                                nb2listw(knn_nb, style="C"), 
+                                method = "eigen")
+
+  k[i] <- glance(error_model1_knni)[[1]]
+  a[i] <- glance(error_model1_knni)[[2]]
+  
+  # update the results of the clustering if the total within sum of squares for the run
+  # is lower than any of the runs that have been executed so far 
+  if (k[i] > max (k[1:(i-1)])){
+    r_squared3 <- k[i]
+    best_k3 <- i
+    AIC3 <- a[i]}
+}
+
+```
+```{r}
+r_squared3
+best_k3 
+AIC3
+```
+
+#### The k for Spatial Error Model 2
+
+```{r}
+r_squared4 <- list()
+best_k4 <- list()
+AIC4 <- list()
+# create empty variable to store fit
+k <- NA
+a <- NA
+  
+# run the k-means 10 times
+for (i in 1:10){
+  
+  # keep track of the runs
+  print(paste0('starting run: k = ', i))
+  coordsW <- residuals %>% 
+    st_centroid() %>%
+    st_geometry()
+  knn_nb <-coordsW %>%
+  knearneigh(., k=i)%>%
+  knn2nb()
+  
+  knn_weight <- knn_nb %>%
+  nb2listw(., style="C")
+  
+  error_model2_knni <- errorsarlm(log(density) ~
+                                  employment_rate+
+                                  log(houseprice)+
+                                  log(publictransaccess_score)+
+                                  log(parking_density)+
+                                  residential_percentage+
+                                  road_percentage,
+                                data = independent, 
+                                nb2listw(knn_nb, style="C"), 
+                                method = "eigen")
+
+  k[i] <- glance(error_model2_knni)[[1]]
+  a[i] <- glance(error_model2_knni)[[2]]
+  
+  # update the results of the clustering if the total within sum of squares for the run
+  # is lower than any of the runs that have been executed so far 
+  if (k[i] > max (k[1:(i-1)])){
+    r_squared4 <- k[i]
+    best_k4 <- i
+    AIC4 <- a[i]}
+}
+
+```
+```{r}
+r_squared4 
+best_k4 
+AIC4
+```
+
+
+### Spatial Error models for Model 1 (KNN; k=9)
+
+
+```{r}
+error_model1_knn9 <- errorsarlm(log(userate) ~
+                                  employment_rate+
+                                  log(houseprice)+
+                                  log(publictransaccess_score)+
+                                  log(parking_density)+
+                                  residential_percentage+
+                                  road_percentage,
+                                data = independent, 
+                                nb2listw(knn_nb, style="C"), 
+                                method = "eigen")
+
+tidy(error_model1_knn9)
+glance(error_model1_knn9)
+```
+```{r}
+error_model2_knn9 <- errorsarlm(log(density) ~
+                                  employment_rate+
+                                  log(houseprice)+
+                                  log(publictransaccess_score)+
+                                  log(parking_density)+
+                                  residential_percentage+
+                                  road_percentage,
+                                data = independent, 
+                                nb2listw(knn_nb, style="C"), 
+                                method = "eigen")
+
+tidy(error_model2_knn9)
+glance(error_model2_knn9)
+```
+
+#### Check residuals
+
+Check wether the residuals of the better model still show spatial correlation. 
+
+```{r}
+# residuals for spatial error model 1
+
+residuals <- residuals %>%
+  mutate(error_model1_knn9_resids = residuals(error_model1_knn9))
+
+ErrorMoran1 <- residuals %>%
+  st_drop_geometry()%>%
+  dplyr::select(error_model1_knn9_resids)%>%
+  pull()%>%
+  moran.test(., knn_weight)%>%
+  tidy()
+
+ErrorMoran1
+```
+
+```{r}
+# residuals for spatial error model 2
+
+residuals <- residuals %>%
+  mutate(error_model2_knn9_resids = residuals(error_model2_knn9))
+
+ErrorMoran2 <- residuals %>%
+  st_drop_geometry()%>%
+  dplyr::select(error_model2_knn9_resids)%>%
+  pull()%>%
+  moran.test(., knn_weight)%>%
+  tidy()
+
+ErrorMoran2
+```
+

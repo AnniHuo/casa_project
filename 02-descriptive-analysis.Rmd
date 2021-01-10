@@ -1,0 +1,249 @@
+
+# Descriptive Analysis
+
+## Load packages
+
+
+### Load basic package
+
+```{r}
+library(sp)
+library(sf)
+library(rgeos)
+library(tmap)
+library(tmaptools)
+library(maptools)
+library(tidyverse)
+library(spdep)
+library(janitor)
+library(rgdal)
+```
+
+### Load plot library
+
+```{r}
+library(ggplot2)
+library(RColorBrewer)
+```
+
+
+
+
+## Load data
+
+
+### Load charge point registry.csv file
+
+
+```{r}
+charge <- read_csv("datasets/national-charge-point-registry.csv")
+summary(charge$chargeDeviceStatus)
+```
+
+
+### Load London wards shapefile
+
+```{r}
+londonwards <- st_read("datasets/wards/London_Ward_CityMerged.shp") %>% 
+  st_transform(., 27700)
+```
+
+
+
+
+## Filter data
+
+
+
+```{r}
+chargepoints <- charge [charge$chargeDeviceStatus=="In service" & !is.na(charge$latitude) & !is.na(charge$longitude),] 
+```
+
+
+### Function to filter year (2014, 2017, 2020 register)
+
+```{r}
+filterfun <- function(end){
+  enddate <- end
+  
+  filterpoints <- chargepoints %>% 
+    filter(chargepoints$dateCreated<=enddate)
+  return(filterpoints)
+}
+
+```
+
+
+### Function to transform projection & crop to London
+
+```{r}
+londonPfun <- function(end){
+  filteredpoints <- filterfun(end)
+  transpoints <- filteredpoints %>% 
+    select(., c(3,4,5)) %>% 
+    st_as_sf(., coords = c("longitude", "latitude"),crs = 4326) %>% 
+    st_transform(., 27700) %>%
+    distinct()
+  
+  charge_london <- st_intersects(londonwards, transpoints)
+  londonpoints <- transpoints[unlist(charge_london),]
+  return(londonpoints)
+}
+```
+
+
+### Instance object
+
+
+```{r}
+trend <- data.frame(date=c("2012", "2013", "2014", "2015", "2016",
+                           "2017", "2018", "2019", "2020"),
+                    count=c(nrow(londonPfun("2012-12-31")),nrow(londonPfun("2013-12-31")),
+                            nrow(londonPfun("2014-12-31")),nrow(londonPfun("2015-12-31")),
+                            nrow(londonPfun("2016-12-31")),nrow(londonPfun("2017-12-31")),
+                            nrow(londonPfun("2018-12-31")),nrow(londonPfun("2019-12-31")),
+                            nrow(londonPfun("2020-12-31"))))
+```
+
+```{r}
+ggplot(data = trend, mapping = aes(x = date, y = count, group = 1)) +
+  geom_line(alpha = 0.7)+
+  geom_point(alpha = 0.6)+
+  geom_text(aes(label = count), vjust = "inward", hjust = "outward", size=3.5)+
+  xlab("Year")+
+  ylab("Number of charging points")+
+  ggtitle("Trend of charging infrastructure deployment in London")+
+  theme(axis.title = element_text(size=18),axis.text = element_text(size=16),
+        strip.text = element_text(size=18))+
+  labs(color = "Development trend")+
+  theme_classic() 
+```
+```{r}
+ggsave("pic/charge points trend.jpg", width = 7, height = 4)
+```
+
+```{r}
+londonpoints2018 <- londonPfun("2018-12-31")
+londonpoints2019 <- londonPfun("2019-12-31")
+londonpoints2020 <- londonPfun("2020-12-31")
+```
+
+### Function to map charge point density by wards
+
+
+```{r}
+pointsjoinedfun <- function(londonpointsyear){
+  londonpointsyear <- londonpointsyear
+  charge_points_ward <- londonpointsyear[londonwards,]
+  
+  points_wards <- londonwards%>%
+    st_join(charge_points_ward)%>%
+    add_count(NAME)%>%
+    janitor::clean_names()%>%
+    #then density of the points per ward
+    mutate(density=(n/hectares)*1000) %>% 
+    mutate(id=1) %>% 
+    mutate(sumpoints=aggregate(n~id,.,FUN=sum)) %>% 
+    mutate(percentage=((n/sumpoints[1, 2]))*100) %>% 
+    #select density and other variables 
+    dplyr::select(density, percentage, name, gss_code, n) %>% 
+    distinct(., gss_code, .keep_all = TRUE)
+  
+  points_wards <- points_wards %>%                    
+    group_by(gss_code) %>%         
+    summarise(density=density,
+              percentage=percentage,
+              wardname=name,
+              chargepointcount=n)
+  return(points_wards)
+}
+```
+
+### Save charge points by wards
+
+```{r}
+points_wards <- pointsjoinedfun(londonpoints2020) %>% 
+  st_drop_geometry()
+write.table(points_wards,"created datasets/points_wards.csv",row.names=FALSE,col.names=TRUE,sep=",")
+```
+
+
+```{r}
+densityfun <- function(londonpointsyear, number, mode){
+  points_wards <- pointsjoinedfun(londonpointsyear)
+  tmap_mode(mode)
+  breaks = c(0, 20, 30, 40, 50, 60, 200, 400, +Inf) 
+  tm <- tm_shape(points_wards) +
+    tm_polygons("density",
+                breaks=breaks,
+                palette=RColorBrewer::brewer.pal(8, "YlOrRd"),
+                midpoint=NA) +
+    tm_legend(show=FALSE)+
+    tm_layout(frame=FALSE)+
+    tm_credits(number, position=c(0,0.85), size=1)
+  
+  return(tm)
+}
+
+```
+```{r}
+legendfun <- function(londonpointsyear){
+  points_wards <- pointsjoinedfun(londonpointsyear)
+  
+  breaks = c(0, 20, 30, 40, 50, 60, 200, 400, +Inf) 
+  legend <- tm_shape(points_wards) +
+    tm_polygons("density",
+                breaks=breaks,
+                palette=RColorBrewer::brewer.pal(8, "YlOrRd"), 
+                title="Density of Charge Points in London \n(per thousand hectare)") +
+    tm_scale_bar(position=c(0.4, 0.01), text.size=0.6)+
+    tm_compass(north=0, position=c(0.75, 0.3))+
+   
+    tm_layout(title = "Charge Points Density Trend", 
+              legend.title.size=1,
+              legend.text.size = 0.6,
+              legend.only = TRUE, 
+              legend.position=c(0.1,0.1),asp=0.1)
+  
+  return(legend)
+}
+```
+
+
+### Tmap - charge point density by ward
+
+```{r}
+
+tm1 <- densityfun(londonpoints2018, "a)", "plot")
+tm2 <- densityfun(londonpoints2019, "b)", "plot")
+tm3 <- densityfun(londonpoints2020, "c)", "plot")
+```
+
+
+```{r}
+legend <- legendfun(londonpoints2020)
+
+
+t_density <- tmap_arrange(tm1, tm2, tm3, legend, ncol=2)
+t_density
+```
+```{r}
+tmap_save(t_density, 'pic/london charge points density.png', width=7, height=4)
+```
+
+```{r}
+
+tm1v <- densityfun(londonpoints2018, "a)", "view")
+tm2v <- densityfun(londonpoints2019, "b)", "view")
+tm3v <- densityfun(londonpoints2020, "c)", "view")
+```
+
+
+```{r}
+legend <- legendfun(londonpoints2020)
+
+
+t_densityv <- tmap_arrange(tm1v, tm2v, tm3v, ncol=1)
+t_densityv
+```
+
