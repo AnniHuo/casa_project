@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Statistical Correlation Analysis | Research on Charging Facility Distribution in London</title>
+  <meta name="description" content="Chapter 4 Statistical Correlation Analysis | Research on Charging Facility Distribution in London" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Statistical Correlation Analysis | Research on Charging Facility Distribution in London" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Statistical Correlation Analysis | Research on Charging Facility Distribution in London" />
+  
+  
+  
+
+<meta name="author" content="Anni Huo" />
+
+
+<meta name="date" content="2021-01-10" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="spatial-autocorrelation-analysis.html"/>
+<link rel="next" href="regression-analysis.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="libs/htmlwidgets-1.5.2/htmlwidgets.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/Proj4Leaflet-1.0.1/proj4-compressed.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.3/leaflet.js"></script>
+<script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="libs/leaflet-providers-plugin-2.0.3/leaflet-providers-plugin.js"></script>
+<script src="libs/Leaflet.Sync-0.0.5/L.Map.Sync.js"></script>
+<script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Chargers Research</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Data Source</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#ncr-dataset"><i class="fa fa-check"></i><b>1.1</b> NCR dataset</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#ward-profiles-and-atlas-2015"><i class="fa fa-check"></i><b>1.2</b> Ward Profiles and Atlas (2015)</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#households-of-london-wards"><i class="fa fa-check"></i><b>1.3</b> Households of London Wards</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#shape-file-of-the-major-road-network"><i class="fa fa-check"></i><b>1.4</b> Shape file of the major road network</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#land-use-by-borough-and-ward"><i class="fa fa-check"></i><b>1.5</b> Land Use by Borough and Ward</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="descriptive-analysis.html"><a href="descriptive-analysis.html"><i class="fa fa-check"></i><b>2</b> Descriptive Analysis</a><ul>
+<li class="chapter" data-level="2.1" data-path="descriptive-analysis.html"><a href="descriptive-analysis.html#load-packages"><i class="fa fa-check"></i><b>2.1</b> Load packages</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="descriptive-analysis.html"><a href="descriptive-analysis.html#load-basic-package"><i class="fa fa-check"></i><b>2.1.1</b> Load basic package</a></li>
+<li class="chapter" data-level="2.1.2" data-path="descriptive-analysis.html"><a href="descriptive-analysis.html#load-plot-library"><i class="fa fa-check"></i><b>2.1.2</b> Load plot library</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="descriptive-analysis.html"><a href="descriptive-analysis.html#load-data"><i class="fa fa-check"></i><b>2.2</b> Load data</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="descriptive-analysis.html"><a href="descriptive-analysis.html#load-charge-point-registry.csv-file"><i class="fa fa-check"></i><b>2.2.1</b> Load charge point registry.csv file</a></li>
+<li class="chapter" data-level="2.2.2" data-path="descriptive-analysis.html"><a href="descriptive-analysis.html#load-london-wards-shapefile"><i class="fa fa-check"></i><b>2.2.2</b> Load London wards shapefile</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="descriptive-analysis.html"><a href="descriptive-analysis.html#filter-data"><i class="fa fa-check"></i><b>2.3</b> Filter data</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="descriptive-analysis.html"><a href="descriptive-analysis.html#function-to-filter-year-2014-2017-2020-register"><i class="fa fa-check"></i><b>2.3.1</b> Function to filter year (2014, 2017, 2020 register)</a></li>
+<li class="chapter" data-level="2.3.2" data-path="descriptive-analysis.html"><a href="descriptive-analysis.html#function-to-transform-projection-crop-to-london"><i class="fa fa-check"></i><b>2.3.2</b> Function to transform projection &amp; crop to London</a></li>
+<li class="chapter" data-level="2.3.3" data-path="descriptive-analysis.html"><a href="descriptive-analysis.html#instance-object"><i class="fa fa-check"></i><b>2.3.3</b> Instance object</a></li>
+<li class="chapter" data-level="2.3.4" data-path="descriptive-analysis.html"><a href="descriptive-analysis.html#function-to-map-charge-point-density-by-wards"><i class="fa fa-check"></i><b>2.3.4</b> Function to map charge point density by wards</a></li>
+<li class="chapter" data-level="2.3.5" data-path="descriptive-analysis.html"><a href="descriptive-analysis.html#save-charge-points-by-wards"><i class="fa fa-check"></i><b>2.3.5</b> Save charge points by wards</a></li>
+<li class="chapter" data-level="2.3.6" data-path="descriptive-analysis.html"><a href="descriptive-analysis.html#tmap---charge-point-density-by-ward"><i class="fa fa-check"></i><b>2.3.6</b> Tmap - charge point density by ward</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="spatial-autocorrelation-analysis.html"><a href="spatial-autocorrelation-analysis.html"><i class="fa fa-check"></i><b>3</b> Spatial Autocorrelation Analysis</a><ul>
+<li class="chapter" data-level="3.1" data-path="spatial-autocorrelation-analysis.html"><a href="spatial-autocorrelation-analysis.html#run-global-morans-i"><i class="fa fa-check"></i><b>3.1</b> Run Global Moran’s I</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="spatial-autocorrelation-analysis.html"><a href="spatial-autocorrelation-analysis.html#function-to-calculate-the-centroids"><i class="fa fa-check"></i><b>3.1.1</b> Function to calculate the centroids</a></li>
+<li class="chapter" data-level="3.1.2" data-path="spatial-autocorrelation-analysis.html"><a href="spatial-autocorrelation-analysis.html#function-to-create-a-neighbours-list"><i class="fa fa-check"></i><b>3.1.2</b> Function to create a neighbours list</a></li>
+<li class="chapter" data-level="3.1.3" data-path="spatial-autocorrelation-analysis.html"><a href="spatial-autocorrelation-analysis.html#function-to-create-spatial-weights"><i class="fa fa-check"></i><b>3.1.3</b> Function to create spatial weights</a></li>
+<li class="chapter" data-level="3.1.4" data-path="spatial-autocorrelation-analysis.html"><a href="spatial-autocorrelation-analysis.html#function-to-run-global-morans-i"><i class="fa fa-check"></i><b>3.1.4</b> Function to run Global Moran’s I</a></li>
+<li class="chapter" data-level="3.1.5" data-path="spatial-autocorrelation-analysis.html"><a href="spatial-autocorrelation-analysis.html#global-morans-i-for-2018-2019-2020"><i class="fa fa-check"></i><b>3.1.5</b> Global Moran’s I for 2018, 2019, 2020</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="spatial-autocorrelation-analysis.html"><a href="spatial-autocorrelation-analysis.html#run-local-morans-i"><i class="fa fa-check"></i><b>3.2</b> Run Local Moran’s I</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="spatial-autocorrelation-analysis.html"><a href="spatial-autocorrelation-analysis.html#function-to-run-local-morans-i"><i class="fa fa-check"></i><b>3.2.1</b> Function to run Local Moran’s I</a></li>
+<li class="chapter" data-level="3.2.2" data-path="spatial-autocorrelation-analysis.html"><a href="spatial-autocorrelation-analysis.html#function-to-run-tmap-for-local-morans-i"><i class="fa fa-check"></i><b>3.2.2</b> Function to run tmap for Local Moran’s I</a></li>
+<li class="chapter" data-level="3.2.3" data-path="spatial-autocorrelation-analysis.html"><a href="spatial-autocorrelation-analysis.html#function-to-run-gi"><i class="fa fa-check"></i><b>3.2.3</b> Function to run Gi*</a></li>
+<li class="chapter" data-level="3.2.4" data-path="spatial-autocorrelation-analysis.html"><a href="spatial-autocorrelation-analysis.html#function-to-run-tmap-for-gi"><i class="fa fa-check"></i><b>3.2.4</b> Function to run tmap for Gi*</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html"><i class="fa fa-check"></i><b>4</b> Statistical Correlation Analysis</a><ul>
+<li class="chapter" data-level="4.1" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#load-packages-1"><i class="fa fa-check"></i><b>4.1</b> Load packages</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#load-plot-library-1"><i class="fa fa-check"></i><b>4.1.1</b> Load plot library</a></li>
+<li class="chapter" data-level="4.1.2" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#load-model-library"><i class="fa fa-check"></i><b>4.1.2</b> Load model library</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#load-files"><i class="fa fa-check"></i><b>4.2</b> Load files</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#load-london-wards-shapefile-1"><i class="fa fa-check"></i><b>4.2.1</b> Load London wards shapefile</a></li>
+<li class="chapter" data-level="4.2.2" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#load-points-in-wards"><i class="fa fa-check"></i><b>4.2.2</b> Load points in wards</a></li>
+<li class="chapter" data-level="4.2.3" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#load-wards-profile"><i class="fa fa-check"></i><b>4.2.3</b> Load wards profile</a></li>
+<li class="chapter" data-level="4.2.4" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#load-household.csv"><i class="fa fa-check"></i><b>4.2.4</b> Load household.csv</a></li>
+<li class="chapter" data-level="4.2.5" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#load-land-use.csv"><i class="fa fa-check"></i><b>4.2.5</b> Load land use.csv</a></li>
+<li class="chapter" data-level="4.2.6" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#load-parking.shp"><i class="fa fa-check"></i><b>4.2.6</b> Load parking.shp</a></li>
+<li class="chapter" data-level="4.2.7" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#select-independent-variables"><i class="fa fa-check"></i><b>4.2.7</b> Select independent variables</a></li>
+<li class="chapter" data-level="4.2.8" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#save-all-characters.csv"><i class="fa fa-check"></i><b>4.2.8</b> Save all characters.csv</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#check-variable-distributions"><i class="fa fa-check"></i><b>4.3</b> Check variable distributions</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#variables"><i class="fa fa-check"></i><b>4.3.1</b> Variables</a></li>
+<li class="chapter" data-level="4.3.2" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#plot-variable-distribution"><i class="fa fa-check"></i><b>4.3.2</b> Plot variable distribution</a></li>
+<li class="chapter" data-level="4.3.3" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#plot-logvariable-distribution"><i class="fa fa-check"></i><b>4.3.3</b> Plot log(variable) distribution</a></li>
+<li class="chapter" data-level="4.3.4" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#plot-logvariable-distribution-1"><i class="fa fa-check"></i><b>4.3.4</b> Plot log(variable) distribution</a></li>
+<li class="chapter" data-level="4.3.5" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#plot-normal-distribution"><i class="fa fa-check"></i><b>4.3.5</b> Plot normal distribution</a></li>
+<li class="chapter" data-level="4.3.6" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#independent-variables"><i class="fa fa-check"></i><b>4.3.6</b> Independent variables</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#correlation-analysis"><i class="fa fa-check"></i><b>4.4</b> Correlation analysis</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="statistical-correlation-analysis.html"><a href="statistical-correlation-analysis.html#correlationship-of-userate-public-transit-of-charge-points-in-london"><i class="fa fa-check"></i><b>4.4.1</b> Correlationship of userate &amp; public transit of charge points in London</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="regression-analysis.html"><a href="regression-analysis.html"><i class="fa fa-check"></i><b>5</b> Regression Analysis</a><ul>
+<li class="chapter" data-level="5.1" data-path="regression-analysis.html"><a href="regression-analysis.html#ordinary-least-squares-ols-regression-model"><i class="fa fa-check"></i><b>5.1</b> Ordinary Least Squares (OLS) regression model</a></li>
+<li class="chapter" data-level="5.2" data-path="regression-analysis.html"><a href="regression-analysis.html#assumptions-underpinning-linear-regression"><i class="fa fa-check"></i><b>5.2</b> Assumptions Underpinning Linear Regression</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="regression-analysis.html"><a href="regression-analysis.html#assumption-1---there-is-a-linear-relationship-between-the-dependent-and-independent-variables"><i class="fa fa-check"></i><b>5.2.1</b> Assumption 1 - There is a linear relationship between the dependent and independent variables</a></li>
+<li class="chapter" data-level="5.2.2" data-path="regression-analysis.html"><a href="regression-analysis.html#assumption-2---the-residuals-in-your-model-should-be-normally-distributed"><i class="fa fa-check"></i><b>5.2.2</b> Assumption 2 - The residuals in your model should be normally distributed</a></li>
+<li class="chapter" data-level="5.2.3" data-path="regression-analysis.html"><a href="regression-analysis.html#assumption-3---no-multicolinearity-in-the-independent-variables"><i class="fa fa-check"></i><b>5.2.3</b> Assumption 3 - No Multicolinearity in the independent variables</a></li>
+<li class="chapter" data-level="5.2.4" data-path="regression-analysis.html"><a href="regression-analysis.html#assumption-4---homoscedasticity"><i class="fa fa-check"></i><b>5.2.4</b> Assumption 4 - Homoscedasticity</a></li>
+<li class="chapter" data-level="5.2.5" data-path="regression-analysis.html"><a href="regression-analysis.html#assumption-5---independence-of-errors"><i class="fa fa-check"></i><b>5.2.5</b> Assumption 5 - Independence of Errors</a></li>
+<li class="chapter" data-level="5.2.6" data-path="regression-analysis.html"><a href="regression-analysis.html#morans-i-test-for-residuals-generally"><i class="fa fa-check"></i><b>5.2.6</b> Moran’s I test for residuals (generally)</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="regression-analysis.html"><a href="regression-analysis.html#spatial-regression-models"><i class="fa fa-check"></i><b>5.3</b> Spatial Regression Models</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="regression-analysis.html"><a href="regression-analysis.html#spatial-lag-models-for-model-1-queen"><i class="fa fa-check"></i><b>5.3.1</b> Spatial Lag models for Model 1 (queen)</a></li>
+<li class="chapter" data-level="5.3.2" data-path="regression-analysis.html"><a href="regression-analysis.html#spatial-lag-models-for-model-2-queen"><i class="fa fa-check"></i><b>5.3.2</b> Spatial Lag models for Model 2 (queen)</a></li>
+<li class="chapter" data-level="5.3.3" data-path="regression-analysis.html"><a href="regression-analysis.html#spatial-error-models-for-model-1-queen"><i class="fa fa-check"></i><b>5.3.3</b> Spatial Error models for Model 1 (queen)</a></li>
+<li class="chapter" data-level="5.3.4" data-path="regression-analysis.html"><a href="regression-analysis.html#spatial-error-models-for-model-2-queen"><i class="fa fa-check"></i><b>5.3.4</b> Spatial Error models for Model 2 (queen)</a></li>
+<li class="chapter" data-level="5.3.5" data-path="regression-analysis.html"><a href="regression-analysis.html#find-best-k-for-knn-strategy"><i class="fa fa-check"></i><b>5.3.5</b> Find best k for KNN strategy</a></li>
+<li class="chapter" data-level="5.3.6" data-path="regression-analysis.html"><a href="regression-analysis.html#spatial-error-models-for-model-1-knn-k9"><i class="fa fa-check"></i><b>5.3.6</b> Spatial Error models for Model 1 (KNN; k=9)</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Research on Charging Facility Distribution in London</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="statistical-correlation-analysis" class="section level1">
+<h1><span class="header-section-number">Chapter 4</span> Statistical Correlation Analysis</h1>
+<p>There are several characteristics are considered to contribute to the density of charge points (CD) and its utilization rates (UR), including socio-demographic, travel-related and land-use characteristics. In specific, they are employment rate (ER), house price (HP), public transit score (PS), which could reflect the level of local public transport), parking density (PD), percentage of residential area (RSP) and percentage of road area (RP).</p>
+<div id="load-packages-1" class="section level2">
+<h2><span class="header-section-number">4.1</span> Load packages</h2>
+<div id="load-plot-library-1" class="section level3">
+<h3><span class="header-section-number">4.1.1</span> Load plot library</h3>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="statistical-correlation-analysis.html#cb170-1"></a><span class="kw">library</span>(Rmisc) </span></code></pre></div>
+<pre><code>## Loading required package: lattice</code></pre>
+<pre><code>## Loading required package: plyr</code></pre>
+<pre><code>## --------------------------------------------------------------------------------------------------</code></pre>
+<pre><code>## You have loaded plyr after dplyr - this is likely to cause problems.
+## If you need functions from both plyr and dplyr, please load plyr first, then dplyr:
+## library(plyr); library(dplyr)</code></pre>
+<pre><code>## --------------------------------------------------------------------------------------------------</code></pre>
+<pre><code>## 
+## Attaching package: &#39;plyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     arrange, count, desc, failwith, id, mutate, rename, summarise, summarize</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     compact</code></pre>
+<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb179-1"><a href="statistical-correlation-analysis.html#cb179-1"></a><span class="kw">library</span>(plyr)</span></code></pre></div>
+</div>
+<div id="load-model-library" class="section level3">
+<h3><span class="header-section-number">4.1.2</span> Load model library</h3>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb180-1"><a href="statistical-correlation-analysis.html#cb180-1"></a><span class="kw">library</span>(stats)</span>
+<span id="cb180-2"><a href="statistical-correlation-analysis.html#cb180-2"></a><span class="kw">library</span>(corrr)</span>
+<span id="cb180-3"><a href="statistical-correlation-analysis.html#cb180-3"></a><span class="kw">library</span>(car)</span></code></pre></div>
+<pre><code>## Loading required package: carData</code></pre>
+<pre><code>## 
+## Attaching package: &#39;car&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     recode</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     some</code></pre>
+<div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb185-1"><a href="statistical-correlation-analysis.html#cb185-1"></a><span class="kw">library</span>(spatstat)</span></code></pre></div>
+<pre><code>## Loading required package: spatstat.data</code></pre>
+<pre><code>## Loading required package: nlme</code></pre>
+<pre><code>## 
+## Attaching package: &#39;nlme&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     collapse</code></pre>
+<pre><code>## Loading required package: rpart</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;spatstat&#39;:
+##   method     from
+##   print.boxx cli</code></pre>
+<pre><code>## 
+## spatstat 1.64-1       (nickname: &#39;Help you I can, yes!&#39;) 
+## For an introduction to spatstat, type &#39;beginner&#39;</code></pre>
+<pre><code>## 
+## Note: spatstat version 1.64-1 is out of date by more than 8 months; we recommend upgrading to the latest version.</code></pre>
+<pre><code>## 
+## Attaching package: &#39;spatstat&#39;</code></pre>
+<pre><code>## The following object is masked _by_ &#39;.GlobalEnv&#39;:
+## 
+##     densityfun</code></pre>
+<pre><code>## The following objects are masked from &#39;package:car&#39;:
+## 
+##     bc, ellipse</code></pre>
+<pre><code>## The following object is masked from &#39;package:lattice&#39;:
+## 
+##     panel.histogram</code></pre>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="statistical-correlation-analysis.html#cb198-1"></a><span class="kw">library</span>(tidymodels)</span></code></pre></div>
+<pre><code>## ── Attaching packages ────────────────────────────────────────────────────────── tidymodels 0.1.2 ──</code></pre>
+<pre><code>## ✓ broom     0.7.2      ✓ recipes   0.1.15
+## ✓ dials     0.0.9      ✓ rsample   0.0.8 
+## ✓ infer     0.5.3      ✓ tune      0.1.2 
+## ✓ modeldata 0.1.0      ✓ workflows 0.2.1 
+## ✓ parsnip   0.1.4      ✓ yardstick 0.0.7</code></pre>
+<pre><code>## ── Conflicts ───────────────────────────────────────────────────────────── tidymodels_conflicts() ──
+## x plyr::arrange()      masks dplyr::arrange()
+## x nlme::collapse()     masks dplyr::collapse()
+## x plyr::compact()      masks purrr::compact()
+## x plyr::count()        masks dplyr::count()
+## x scales::discard()    masks purrr::discard()
+## x plyr::failwith()     masks dplyr::failwith()
+## x dplyr::filter()      masks stats::filter()
+## x recipes::fixed()     masks stringr::fixed()
+## x plyr::id()           masks dplyr::id()
+## x dplyr::lag()         masks stats::lag()
+## x plyr::mutate()       masks dplyr::mutate()
+## x tune::parameters()   masks dials::parameters(), spatstat::parameters()
+## x dials::prune()       masks rpart::prune()
+## x car::recode()        masks dplyr::recode()
+## x plyr::rename()       masks dplyr::rename()
+## x car::some()          masks purrr::some()
+## x yardstick::spec()    masks readr::spec()
+## x recipes::step()      masks stats::step()
+## x plyr::summarise()    masks dplyr::summarise()
+## x plyr::summarize()    masks dplyr::summarize()
+## x parsnip::translate() masks rgeos::translate()</code></pre>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="statistical-correlation-analysis.html#cb202-1"></a><span class="kw">library</span>(spatialreg)</span></code></pre></div>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## 
+## Attaching package: &#39;Matrix&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:tidyr&#39;:
+## 
+##     expand, pack, unpack</code></pre>
+<pre><code>## Registered S3 methods overwritten by &#39;spatialreg&#39;:
+##   method                   from 
+##   residuals.stsls          spdep
+##   deviance.stsls           spdep
+##   coef.stsls               spdep
+##   print.stsls              spdep
+##   summary.stsls            spdep
+##   print.summary.stsls      spdep
+##   residuals.gmsar          spdep
+##   deviance.gmsar           spdep
+##   coef.gmsar               spdep
+##   fitted.gmsar             spdep
+##   print.gmsar              spdep
+##   summary.gmsar            spdep
+##   print.summary.gmsar      spdep
+##   print.lagmess            spdep
+##   summary.lagmess          spdep
+##   print.summary.lagmess    spdep
+##   residuals.lagmess        spdep
+##   deviance.lagmess         spdep
+##   coef.lagmess             spdep
+##   fitted.lagmess           spdep
+##   logLik.lagmess           spdep
+##   fitted.SFResult          spdep
+##   print.SFResult           spdep
+##   fitted.ME_res            spdep
+##   print.ME_res             spdep
+##   print.lagImpact          spdep
+##   plot.lagImpact           spdep
+##   summary.lagImpact        spdep
+##   HPDinterval.lagImpact    spdep
+##   print.summary.lagImpact  spdep
+##   print.sarlm              spdep
+##   summary.sarlm            spdep
+##   residuals.sarlm          spdep
+##   deviance.sarlm           spdep
+##   coef.sarlm               spdep
+##   vcov.sarlm               spdep
+##   fitted.sarlm             spdep
+##   logLik.sarlm             spdep
+##   anova.sarlm              spdep
+##   predict.sarlm            spdep
+##   print.summary.sarlm      spdep
+##   print.sarlm.pred         spdep
+##   as.data.frame.sarlm.pred spdep
+##   residuals.spautolm       spdep
+##   deviance.spautolm        spdep
+##   coef.spautolm            spdep
+##   fitted.spautolm          spdep
+##   print.spautolm           spdep
+##   summary.spautolm         spdep
+##   logLik.spautolm          spdep
+##   print.summary.spautolm   spdep
+##   print.WXImpact           spdep
+##   summary.WXImpact         spdep
+##   print.summary.WXImpact   spdep
+##   predict.SLX              spdep</code></pre>
+<pre><code>## 
+## Attaching package: &#39;spatialreg&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:spdep&#39;:
+## 
+##     anova.sarlm, as_dgRMatrix_listw, as_dsCMatrix_I, as_dsCMatrix_IrW,
+##     as_dsTMatrix_listw, as.spam.listw, bptest.sarlm, can.be.simmed, cheb_setup,
+##     coef.gmsar, coef.sarlm, coef.spautolm, coef.stsls, create_WX, deviance.gmsar,
+##     deviance.sarlm, deviance.spautolm, deviance.stsls, do_ldet, eigen_pre_setup,
+##     eigen_setup, eigenw, errorsarlm, fitted.gmsar, fitted.ME_res, fitted.sarlm,
+##     fitted.SFResult, fitted.spautolm, get.ClusterOption, get.coresOption, get.mcOption,
+##     get.VerboseOption, get.ZeroPolicyOption, GMargminImage, GMerrorsar, griffith_sone,
+##     gstsls, Hausman.test, HPDinterval.lagImpact, impacts, intImpacts, Jacobian_W,
+##     jacobianSetup, l_max, lagmess, lagsarlm, lextrB, lextrS, lextrW, lmSLX, logLik.sarlm,
+##     logLik.spautolm, LR.sarlm, LR1.sarlm, LR1.spautolm, LU_prepermutate_setup, LU_setup,
+##     Matrix_J_setup, Matrix_setup, mcdet_setup, MCMCsamp, ME, mom_calc, mom_calc_int2,
+##     moments_setup, powerWeights, predict.sarlm, predict.SLX, print.gmsar, print.ME_res,
+##     print.sarlm, print.sarlm.pred, print.SFResult, print.spautolm, print.stsls,
+##     print.summary.gmsar, print.summary.sarlm, print.summary.spautolm,
+##     print.summary.stsls, residuals.gmsar, residuals.sarlm, residuals.spautolm,
+##     residuals.stsls, sacsarlm, SE_classic_setup, SE_interp_setup, SE_whichMin_setup,
+##     set.ClusterOption, set.coresOption, set.mcOption, set.VerboseOption,
+##     set.ZeroPolicyOption, similar.listw, spam_setup, spam_update_setup, SpatialFiltering,
+##     spautolm, spBreg_err, spBreg_lag, spBreg_sac, stsls, subgraph_eigenw, summary.gmsar,
+##     summary.sarlm, summary.spautolm, summary.stsls, trW, vcov.sarlm, Wald1.sarlm</code></pre>
+</div>
+</div>
+<div id="load-files" class="section level2">
+<h2><span class="header-section-number">4.2</span> Load files</h2>
+<div id="load-london-wards-shapefile-1" class="section level3">
+<h3><span class="header-section-number">4.2.1</span> Load London wards shapefile</h3>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="statistical-correlation-analysis.html#cb209-1"></a>londonwards &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;datasets/wards/London_Ward_CityMerged.shp&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb209-2"><a href="statistical-correlation-analysis.html#cb209-2"></a><span class="st">  </span><span class="kw">st_transform</span>(., <span class="dv">27700</span>)</span></code></pre></div>
+<pre><code>## Reading layer `London_Ward_CityMerged&#39; from data source `/Users/apple/OneDrive - University College London/Module assessment/CASA_project/casa_project/datasets/wards/London_Ward_CityMerged.shp&#39; using driver `ESRI Shapefile&#39;
+## Simple feature collection with 625 features and 7 fields
+## geometry type:  POLYGON
+## dimension:      XY
+## bbox:           xmin: 503568.2 ymin: 155850.8 xmax: 561957.5 ymax: 200933.9
+## projected CRS:  OSGB 1936 / British National Grid</code></pre>
+</div>
+<div id="load-points-in-wards" class="section level3">
+<h3><span class="header-section-number">4.2.2</span> Load points in wards</h3>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="statistical-correlation-analysis.html#cb211-1"></a>points_wards &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;created datasets/points_wards.csv&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────────────────────────
+## cols(
+##   gss_code = col_character(),
+##   density = col_double(),
+##   percentage = col_double(),
+##   wardname = col_character(),
+##   chargepointcount = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="statistical-correlation-analysis.html#cb213-1"></a><span class="kw">summary</span>(points_wards)</span></code></pre></div>
+<pre><code>##    gss_code            density           percentage         wardname         chargepointcount
+##  Length:625         Min.   :  0.3444   Min.   :0.001479   Length:625         Min.   : 1.000  
+##  Class :character   1st Qu.:  5.8152   1st Qu.:0.001479   Class :character   1st Qu.: 1.000  
+##  Mode  :character   Median : 15.6903   Median :0.004436   Mode  :character   Median : 3.000  
+##                     Mean   : 50.7528   Mean   :0.010053                      Mean   : 6.798  
+##                     3rd Qu.: 58.0526   3rd Qu.:0.011830                      3rd Qu.: 8.000  
+##                     Max.   :686.6051   Max.   :0.075417                      Max.   :51.000</code></pre>
+</div>
+<div id="load-wards-profile" class="section level3">
+<h3><span class="header-section-number">4.2.3</span> Load wards profile</h3>
+<p>Load London wards profile as the basic data frame for correlation analysis</p>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="statistical-correlation-analysis.html#cb215-1"></a>ward_profile &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;datasets/ward_profiles.csv&quot;</span>,</span>
+<span id="cb215-2"><a href="statistical-correlation-analysis.html#cb215-2"></a>                         <span class="dt">col_types =</span> <span class="kw">cols</span>(</span>
+<span id="cb215-3"><a href="statistical-correlation-analysis.html#cb215-3"></a>                           <span class="st">&quot;New code&quot;</span> =<span class="st"> </span><span class="kw">col_character</span>(),</span>
+<span id="cb215-4"><a href="statistical-correlation-analysis.html#cb215-4"></a>                           <span class="st">&quot;% All Working-age (16-64) - 2015&quot;</span>=<span class="st"> </span><span class="kw">col_number</span>(),</span>
+<span id="cb215-5"><a href="statistical-correlation-analysis.html#cb215-5"></a>                           <span class="st">&quot;Population density (persons per sq km) - 2013&quot;</span>=<span class="st"> </span><span class="kw">col_number</span>(),</span>
+<span id="cb215-6"><a href="statistical-correlation-analysis.html#cb215-6"></a>                           <span class="st">&quot;Number Killed or Seriously Injured on the roads - 2014&quot;</span> =<span class="st"> </span><span class="kw">col_number</span>(),</span>
+<span id="cb215-7"><a href="statistical-correlation-analysis.html#cb215-7"></a>                           <span class="st">&quot;Employment rate (16-64) - 2011&quot;</span> =<span class="st"> </span><span class="kw">col_number</span>(),</span>
+<span id="cb215-8"><a href="statistical-correlation-analysis.html#cb215-8"></a>                           <span class="st">&quot;Median House Price (£) - 2014&quot;</span> =<span class="st"> </span><span class="kw">col_number</span>(),</span>
+<span id="cb215-9"><a href="statistical-correlation-analysis.html#cb215-9"></a>                           <span class="st">&quot;Cars per household - 2011&quot;</span> =<span class="st"> </span><span class="kw">col_number</span>(),</span>
+<span id="cb215-10"><a href="statistical-correlation-analysis.html#cb215-10"></a>                           <span class="st">&quot;Average Public Transport Accessibility score - 2014&quot;</span>=<span class="st"> </span><span class="kw">col_number</span>()</span>
+<span id="cb215-11"><a href="statistical-correlation-analysis.html#cb215-11"></a>                         ))</span></code></pre></div>
+<pre><code>## Warning: 6 parsing failures.
+## row                                                    col expected                                                                   actual                         file
+## 660 Average Public Transport Accessibility score - 2014    a number n/a                                                                      &#39;datasets/ward_profiles.csv&#39;
+## 661 % All Working-age (16-64) - 2015                       a number GLA SHLAA Trend based Population Projection data, and Mid year estimates &#39;datasets/ward_profiles.csv&#39;
+## 661 Population density (persons per sq km) - 2013          a number GLA SHLAA Trend based Population Projection data                         &#39;datasets/ward_profiles.csv&#39;
+## 661 Number Killed or Seriously Injured on the roads - 2014 a number London Ambulance Service                                                 &#39;datasets/ward_profiles.csv&#39;
+## 661 Median House Price (£) - 2014                          a number Land Registry                                                            &#39;datasets/ward_profiles.csv&#39;
+## ... ...................................................... ........ ........................................................................ ............................
+## See problems(...) for more details.</code></pre>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="statistical-correlation-analysis.html#cb217-1"></a><span class="kw">colnames</span>(ward_profile)</span></code></pre></div>
+<pre><code>##  [1] &quot;Ward name&quot;                                                                  
+##  [2] &quot;Old code&quot;                                                                   
+##  [3] &quot;New code&quot;                                                                   
+##  [4] &quot;Population - 2015&quot;                                                          
+##  [5] &quot;Children aged 0-15 - 2015&quot;                                                  
+##  [6] &quot;Working-age (16-64) - 2015&quot;                                                 
+##  [7] &quot;Older people aged 65+ - 2015&quot;                                               
+##  [8] &quot;% All Children aged 0-15 - 2015&quot;                                            
+##  [9] &quot;% All Working-age (16-64) - 2015&quot;                                           
+## [10] &quot;% All Older people aged 65+ - 2015&quot;                                         
+## [11] &quot;Mean Age - 2013&quot;                                                            
+## [12] &quot;Median Age - 2013&quot;                                                          
+## [13] &quot;Area - Square Kilometres&quot;                                                   
+## [14] &quot;Population density (persons per sq km) - 2013&quot;                              
+## [15] &quot;% BAME - 2011&quot;                                                              
+## [16] &quot;% Not Born in UK - 2011&quot;                                                    
+## [17] &quot;% English is First Language of no one in household - 2011&quot;                  
+## [18] &quot;General Fertility Rate - 2013&quot;                                              
+## [19] &quot;Male life expectancy -2009-13&quot;                                              
+## [20] &quot;Female life expectancy -2009-13&quot;                                            
+## [21] &quot;% children in reception year who are obese - 2011/12 to 2013/14&quot;            
+## [22] &quot;% children in year 6 who are obese- 2011/12 to 2013/14&quot;                     
+## [23] &quot;Rate of All Ambulance Incidents per 1,000 population - 2014&quot;                
+## [24] &quot;Rates of ambulance call outs for alcohol related illness - 2014&quot;            
+## [25] &quot;Number Killed or Seriously Injured on the roads - 2014&quot;                     
+## [26] &quot;In employment (16-64) - 2011&quot;                                               
+## [27] &quot;Employment rate (16-64) - 2011&quot;                                             
+## [28] &quot;Number of jobs in area - 2013&quot;                                              
+## [29] &quot;Employment per head of resident WA population - 2013&quot;                       
+## [30] &quot;Rate of new registrations of migrant workers - 2011/12&quot;                     
+## [31] &quot;Median House Price (£) - 2014&quot;                                              
+## [32] &quot;Number of properties sold - 2014&quot;                                           
+## [33] &quot;Median Household income estimate (2012/13)&quot;                                 
+## [34] &quot;Number of Household spaces - 2011&quot;                                          
+## [35] &quot;% detached houses - 2011&quot;                                                   
+## [36] &quot;% semi-detached houses - 2011&quot;                                              
+## [37] &quot;% terraced houses - 2011&quot;                                                   
+## [38] &quot;% Flat, maisonette or apartment - 2011&quot;                                     
+## [39] &quot;% Households Owned - 2011&quot;                                                  
+## [40] &quot;% Households Social Rented - 2011&quot;                                          
+## [41] &quot;% Households Private Rented - 2011&quot;                                         
+## [42] &quot;% dwellings in council tax bands A or B - 2015&quot;                             
+## [43] &quot;% dwellings in council tax bands C, D or E - 2015&quot;                          
+## [44] &quot;% dwellings in council tax bands F, G or H - 2015&quot;                          
+## [45] &quot;Claimant rate of key out-of-work benefits (working age client group) (2014)&quot;
+## [46] &quot;Claimant Rate of Housing Benefit (2015)&quot;                                    
+## [47] &quot;Claimant Rate of Employment Support Allowance - 2014&quot;                       
+## [48] &quot;Rate of JobSeekers Allowance (JSA) Claimants - 2015&quot;                        
+## [49] &quot;% dependent children (0-18) in out-of-work households - 2014&quot;               
+## [50] &quot;% of households with no adults in employment with dependent children - 2011&quot;
+## [51] &quot;% of lone parents not in employment - 2011&quot;                                 
+## [52] &quot;(ID2010) - Rank of average score (within London) - 2010&quot;                    
+## [53] &quot;(ID2010) % of LSOAs in worst 50% nationally - 2010&quot;                         
+## [54] &quot;Average GCSE capped point scores - 2014&quot;                                    
+## [55] &quot;Unauthorised Absence in All Schools (%) - 2013&quot;                             
+## [56] &quot;% with no qualifications - 2011&quot;                                            
+## [57] &quot;% with Level 4 qualifications and above - 2011&quot;                             
+## [58] &quot;A-Level Average Point Score Per Student - 2013/14&quot;                          
+## [59] &quot;A-Level Average Point Score Per Entry; 2013/14&quot;                             
+## [60] &quot;Crime rate - 2014/15&quot;                                                       
+## [61] &quot;Violence against the person rate - 2014/15&quot;                                 
+## [62] &quot;Deliberate Fires per 1,000 population - 2014&quot;                               
+## [63] &quot;% area that is open space - 2014&quot;                                           
+## [64] &quot;Cars per household - 2011&quot;                                                  
+## [65] &quot;Average Public Transport Accessibility score - 2014&quot;                        
+## [66] &quot;% travel by bicycle to work - 2011&quot;                                         
+## [67] &quot;Turnout at Mayoral election - 2012&quot;</code></pre>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="statistical-correlation-analysis.html#cb219-1"></a><span class="kw">head</span>(ward_profile)</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 67
+##   `Ward name` `Old code` `New code` `Population - 2… `Children aged … `Working-age (1…
+##   &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;           
+## 1 City of Lo… 00AA       E09000001  8,100            650              6,250           
+## 2 Barking an… 00ABFX     E05000026  14,750           3,850            10,150          
+## 3 Barking an… 00ABFY     E05000027  10,600           2,700            6,800           
+## 4 Barking an… 00ABFZ     E05000028  12,700           3,200            8,350           
+## 5 Barking an… 00ABGA     E05000029  10,400           2,550            6,400           
+## 6 Barking an… 00ABGB     E05000030  10,750           2,150            7,050           
+## # … with 61 more variables: `Older people aged 65+ - 2015` &lt;chr&gt;, `% All Children aged 0-15 -
+## #   2015` &lt;chr&gt;, `% All Working-age (16-64) - 2015` &lt;dbl&gt;, `% All Older people aged 65+ -
+## #   2015` &lt;chr&gt;, `Mean Age - 2013` &lt;chr&gt;, `Median Age - 2013` &lt;chr&gt;, `Area - Square
+## #   Kilometres` &lt;chr&gt;, `Population density (persons per sq km) - 2013` &lt;dbl&gt;, `% BAME -
+## #   2011` &lt;chr&gt;, `% Not Born in UK - 2011` &lt;chr&gt;, `% English is First Language of no one in
+## #   household - 2011` &lt;chr&gt;, `General Fertility Rate - 2013` &lt;chr&gt;, `Male life expectancy
+## #   -2009-13` &lt;chr&gt;, `Female life expectancy -2009-13` &lt;chr&gt;, `% children in reception year who are
+## #   obese - 2011/12 to 2013/14` &lt;chr&gt;, `% children in year 6 who are obese- 2011/12 to
+## #   2013/14` &lt;chr&gt;, `Rate of All Ambulance Incidents per 1,000 population - 2014` &lt;chr&gt;, `Rates of
+## #   ambulance call outs for alcohol related illness - 2014` &lt;chr&gt;, `Number Killed or Seriously
+## #   Injured on the roads - 2014` &lt;dbl&gt;, `In employment (16-64) - 2011` &lt;chr&gt;, `Employment rate
+## #   (16-64) - 2011` &lt;dbl&gt;, `Number of jobs in area - 2013` &lt;chr&gt;, `Employment per head of resident
+## #   WA population - 2013` &lt;chr&gt;, `Rate of new registrations of migrant workers - 2011/12` &lt;chr&gt;,
+## #   `Median House Price (£) - 2014` &lt;dbl&gt;, `Number of properties sold - 2014` &lt;chr&gt;, `Median
+## #   Household income estimate (2012/13)` &lt;chr&gt;, `Number of Household spaces - 2011` &lt;chr&gt;, `%
+## #   detached houses - 2011` &lt;chr&gt;, `% semi-detached houses - 2011` &lt;chr&gt;, `% terraced houses -
+## #   2011` &lt;chr&gt;, `% Flat, maisonette or apartment - 2011` &lt;chr&gt;, `% Households Owned - 2011` &lt;chr&gt;,
+## #   `% Households Social Rented - 2011` &lt;chr&gt;, `% Households Private Rented - 2011` &lt;chr&gt;, `%
+## #   dwellings in council tax bands A or B - 2015` &lt;chr&gt;, `% dwellings in council tax bands C, D or
+## #   E - 2015` &lt;chr&gt;, `% dwellings in council tax bands F, G or H - 2015` &lt;chr&gt;, `Claimant rate of
+## #   key out-of-work benefits (working age client group) (2014)` &lt;chr&gt;, `Claimant Rate of Housing
+## #   Benefit (2015)` &lt;chr&gt;, `Claimant Rate of Employment Support Allowance - 2014` &lt;chr&gt;, `Rate of
+## #   JobSeekers Allowance (JSA) Claimants - 2015` &lt;chr&gt;, `% dependent children (0-18) in out-of-work
+## #   households - 2014` &lt;chr&gt;, `% of households with no adults in employment with dependent children
+## #   - 2011` &lt;chr&gt;, `% of lone parents not in employment - 2011` &lt;chr&gt;, `(ID2010) - Rank of average
+## #   score (within London) - 2010` &lt;chr&gt;, `(ID2010) % of LSOAs in worst 50% nationally -
+## #   2010` &lt;chr&gt;, `Average GCSE capped point scores - 2014` &lt;chr&gt;, `Unauthorised Absence in All
+## #   Schools (%) - 2013` &lt;chr&gt;, `% with no qualifications - 2011` &lt;chr&gt;, `% with Level 4
+## #   qualifications and above - 2011` &lt;chr&gt;, `A-Level Average Point Score Per Student -
+## #   2013/14` &lt;chr&gt;, `A-Level Average Point Score Per Entry; 2013/14` &lt;chr&gt;, `Crime rate -
+## #   2014/15` &lt;chr&gt;, `Violence against the person rate - 2014/15` &lt;chr&gt;, `Deliberate Fires per 1,000
+## #   population - 2014` &lt;chr&gt;, `% area that is open space - 2014` &lt;chr&gt;, `Cars per household -
+## #   2011` &lt;dbl&gt;, `Average Public Transport Accessibility score - 2014` &lt;dbl&gt;, `% travel by bicycle
+## #   to work - 2011` &lt;chr&gt;, `Turnout at Mayoral election - 2012` &lt;chr&gt;</code></pre>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="statistical-correlation-analysis.html#cb221-1"></a>londonward_code &lt;-<span class="st"> </span>londonwards <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb221-2"><a href="statistical-correlation-analysis.html#cb221-2"></a><span class="st">  </span><span class="kw">st_drop_geometry</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb221-3"><a href="statistical-correlation-analysis.html#cb221-3"></a><span class="st">  </span><span class="kw">clean_names</span>() </span></code></pre></div>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="statistical-correlation-analysis.html#cb222-1"></a>londonward_code &lt;-<span class="st"> </span>londonward_code <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb222-2"><a href="statistical-correlation-analysis.html#cb222-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(., <span class="kw">c</span>(<span class="dv">2</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="statistical-correlation-analysis.html#cb223-1"></a>wardprofile &lt;-<span class="st"> </span>ward_profile <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb223-2"><a href="statistical-correlation-analysis.html#cb223-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(., <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">9</span>, <span class="dv">14</span>, <span class="dv">25</span>, <span class="dv">27</span>, <span class="dv">31</span>, <span class="dv">64</span>, <span class="dv">65</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb223-3"><a href="statistical-correlation-analysis.html#cb223-3"></a><span class="st">  </span><span class="kw">clean_names</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb223-4"><a href="statistical-correlation-analysis.html#cb223-4"></a><span class="st">  </span><span class="kw">group_by</span>(ward_name) <span class="op">%&gt;%</span><span class="st">         </span></span>
+<span id="cb223-5"><a href="statistical-correlation-analysis.html#cb223-5"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="dt">old_code=</span>old_code,</span>
+<span id="cb223-6"><a href="statistical-correlation-analysis.html#cb223-6"></a>              <span class="dt">gss_code=</span>new_code,</span>
+<span id="cb223-7"><a href="statistical-correlation-analysis.html#cb223-7"></a>              <span class="dt">pop_density=</span>population_density_persons_per_sq_km_<span class="dv">2013</span>,</span>
+<span id="cb223-8"><a href="statistical-correlation-analysis.html#cb223-8"></a>              <span class="dt">road_incidents=</span>number_killed_or_seriously_injured_on_the_roads_<span class="dv">2014</span>,</span>
+<span id="cb223-9"><a href="statistical-correlation-analysis.html#cb223-9"></a>              <span class="dt">employment_rate=</span>employment_rate_<span class="dv">16</span>_<span class="dv">64</span>_<span class="dv">2011</span>,</span>
+<span id="cb223-10"><a href="statistical-correlation-analysis.html#cb223-10"></a>              <span class="dt">houseprice=</span>median_house_price_<span class="dv">2014</span>,</span>
+<span id="cb223-11"><a href="statistical-correlation-analysis.html#cb223-11"></a>              <span class="dt">car_ownership=</span>cars_per_household_<span class="dv">2011</span>,</span>
+<span id="cb223-12"><a href="statistical-correlation-analysis.html#cb223-12"></a>              <span class="dt">publictransaccess_score=</span>average_public_transport_accessibility_score_<span class="dv">2014</span>)<span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb223-13"><a href="statistical-correlation-analysis.html#cb223-13"></a><span class="st">  </span><span class="kw">merge</span>(londonward_code, .,</span>
+<span id="cb223-14"><a href="statistical-correlation-analysis.html#cb223-14"></a>        <span class="dt">by.x =</span> <span class="st">&quot;gss_code&quot;</span>,</span>
+<span id="cb223-15"><a href="statistical-correlation-analysis.html#cb223-15"></a>        <span class="dt">by.y =</span> <span class="st">&quot;gss_code&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb223-16"><a href="statistical-correlation-analysis.html#cb223-16"></a><span class="st">  </span><span class="kw">distinct</span>(.,<span class="dt">.keep_all=</span><span class="ot">TRUE</span>)</span>
+<span id="cb223-17"><a href="statistical-correlation-analysis.html#cb223-17"></a></span>
+<span id="cb223-18"><a href="statistical-correlation-analysis.html#cb223-18"></a></span>
+<span id="cb223-19"><a href="statistical-correlation-analysis.html#cb223-19"></a><span class="kw">colnames</span>(wardprofile)</span></code></pre></div>
+<pre><code>## [1] &quot;gss_code&quot;                &quot;old_code&quot;                &quot;pop_density&quot;            
+## [4] &quot;road_incidents&quot;          &quot;employment_rate&quot;         &quot;houseprice&quot;             
+## [7] &quot;car_ownership&quot;           &quot;publictransaccess_score&quot;</code></pre>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="statistical-correlation-analysis.html#cb225-1"></a><span class="kw">write.table</span>(wardprofile,<span class="st">&quot;created datasets/wardprofile.csv&quot;</span>,<span class="dt">row.names=</span><span class="ot">FALSE</span>,<span class="dt">col.names=</span><span class="ot">TRUE</span>,<span class="dt">sep=</span><span class="st">&quot;,&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="statistical-correlation-analysis.html#cb226-1"></a>allcharacter &lt;-<span class="st"> </span>points_wards <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb226-2"><a href="statistical-correlation-analysis.html#cb226-2"></a><span class="st">  </span><span class="kw">left_join</span>(wardprofile,.,</span>
+<span id="cb226-3"><a href="statistical-correlation-analysis.html#cb226-3"></a>            <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;gss_code&quot;</span> =<span class="st"> &quot;gss_code&quot;</span>))</span></code></pre></div>
+</div>
+<div id="load-household.csv" class="section level3">
+<h3><span class="header-section-number">4.2.4</span> Load household.csv</h3>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="statistical-correlation-analysis.html#cb227-1"></a>household &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;datasets/households-type-2001-ward.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb227-2"><a href="statistical-correlation-analysis.html#cb227-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(., <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb227-3"><a href="statistical-correlation-analysis.html#cb227-3"></a><span class="st">  </span><span class="kw">clean_names</span>()</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────────────────────────
+## cols(
+##   `Area code` = col_character(),
+##   `Area name` = col_character(),
+##   `All Households` = col_double(),
+##   `Couple household with dependent children` = col_double(),
+##   `Couple household without dependent children` = col_double(),
+##   `Lone parent household` = col_double(),
+##   `One person household` = col_double(),
+##   `Other multi person household` = col_double(),
+##   `% Couple household with dependent children` = col_double(),
+##   `% Couple household without dependent children` = col_double(),
+##   `% Lone parent household` = col_double(),
+##   `% One person household` = col_double(),
+##   `% Other multi person household` = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="statistical-correlation-analysis.html#cb229-1"></a><span class="kw">summary</span>(household)</span></code></pre></div>
+<pre><code>##   area_code         all_households    
+##  Length:627         Min.   :    1900  
+##  Class :character   1st Qu.:    4203  
+##  Mode  :character   Median :    4741  
+##                     Mean   :   44167  
+##                     3rd Qu.:    5386  
+##                     Max.   :21660475</code></pre>
+<p>Join household dataset to the ward profile data frame</p>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="statistical-correlation-analysis.html#cb231-1"></a>allcharacter &lt;-<span class="st"> </span>allcharacter <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb231-2"><a href="statistical-correlation-analysis.html#cb231-2"></a><span class="st">  </span><span class="kw">left_join</span>(., household,</span>
+<span id="cb231-3"><a href="statistical-correlation-analysis.html#cb231-3"></a>            <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;old_code&quot;</span> =<span class="st"> &quot;area_code&quot;</span>))</span></code></pre></div>
+</div>
+<div id="load-land-use.csv" class="section level3">
+<h3><span class="header-section-number">4.2.5</span> Load land use.csv</h3>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="statistical-correlation-analysis.html#cb232-1"></a>landuse &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;datasets/land-use-glud-ward.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb232-2"><a href="statistical-correlation-analysis.html#cb232-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(., <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">16</span>, <span class="dv">17</span>, <span class="dv">19</span>, <span class="dv">20</span>, <span class="dv">21</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb232-3"><a href="statistical-correlation-analysis.html#cb232-3"></a><span class="st">  </span><span class="kw">clean_names</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb232-4"><a href="statistical-correlation-analysis.html#cb232-4"></a><span class="st">  </span><span class="kw">group_by</span>(area_name) <span class="op">%&gt;%</span><span class="st">         </span></span>
+<span id="cb232-5"><a href="statistical-correlation-analysis.html#cb232-5"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="dt">area_code=</span>area_code,</span>
+<span id="cb232-6"><a href="statistical-correlation-analysis.html#cb232-6"></a>              <span class="dt">residential_percentage=</span>percent_area_of_domestic_buildings<span class="op">+</span>percent_area_of_domestic_gardens, <span class="dt">road_percentage=</span> percent_area_of_road,</span>
+<span id="cb232-7"><a href="statistical-correlation-analysis.html#cb232-7"></a>              <span class="dt">rail_percentage =</span> percent_area_of_rail,</span>
+<span id="cb232-8"><a href="statistical-correlation-analysis.html#cb232-8"></a>              <span class="dt">path_percentage =</span> percent_area_of_path)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────────────────────────
+## cols(
+##   .default = col_double(),
+##   `Area Code` = col_character(),
+##   `Local Authority Name` = col_character(),
+##   `Area name` = col_character(),
+##   `Area of Rail` = col_character()
+## )
+## ℹ Use `spec()` for the full column specifications.</code></pre>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="statistical-correlation-analysis.html#cb234-1"></a><span class="kw">summary</span>(landuse)</span></code></pre></div>
+<pre><code>##   area_code         residential_percentage road_percentage rail_percentage  path_percentage
+##  Length:626         Min.   : 4.30          Min.   : 1.40   Min.   : 0.000   Min.   :0.10   
+##  Class :character   1st Qu.:27.80          1st Qu.:12.43   1st Qu.: 0.000   1st Qu.:0.50   
+##  Mode  :character   Median :39.20          Median :15.50   Median : 0.500   Median :0.80   
+##                     Mean   :38.21          Mean   :16.09   Mean   : 1.377   Mean   :0.95   
+##                     3rd Qu.:49.58          3rd Qu.:19.80   3rd Qu.: 1.700   3rd Qu.:1.30   
+##                     Max.   :70.60          Max.   :36.00   Max.   :25.200   Max.   :6.20   
+##                                                            NA&#39;s   :1</code></pre>
+<p>Join landuse dataset to the ward profile data frame</p>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="statistical-correlation-analysis.html#cb236-1"></a>allcharacter &lt;-<span class="st"> </span>allcharacter <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb236-2"><a href="statistical-correlation-analysis.html#cb236-2"></a><span class="st">  </span><span class="kw">left_join</span>(., landuse,</span>
+<span id="cb236-3"><a href="statistical-correlation-analysis.html#cb236-3"></a>            <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;old_code&quot;</span> =<span class="st"> &quot;area_code&quot;</span>))</span></code></pre></div>
+</div>
+<div id="load-parking.shp" class="section level3">
+<h3><span class="header-section-number">4.2.6</span> Load parking.shp</h3>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="statistical-correlation-analysis.html#cb237-1"></a>parking &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;datasets/parking/gis_osm_traffic_a_free_1.shp&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb237-2"><a href="statistical-correlation-analysis.html#cb237-2"></a><span class="st">  </span><span class="kw">st_transform</span>(., <span class="dv">27700</span>) </span></code></pre></div>
+<pre><code>## Reading layer `gis_osm_traffic_a_free_1&#39; from data source `/Users/apple/OneDrive - University College London/Module assessment/CASA_project/casa_project/datasets/parking/gis_osm_traffic_a_free_1.shp&#39; using driver `ESRI Shapefile&#39;
+## Simple feature collection with 9254 features and 4 fields
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: -0.5001657 ymin: 51.2926 xmax: 0.2972421 ymax: 51.68594
+## geographic CRS: WGS 84</code></pre>
+<p>Join parking dataset to the ward profile data frame</p>
+<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb239-1"><a href="statistical-correlation-analysis.html#cb239-1"></a>parking &lt;-<span class="st"> </span>parking[parking<span class="op">$</span>fclass<span class="op">==</span><span class="st">&quot;parking&quot;</span><span class="op">|</span>parking<span class="op">$</span>fclass<span class="op">==</span><span class="st">&quot;parking_multistorey&quot;</span><span class="op">|</span>parking<span class="op">$</span>fclass<span class="op">==</span><span class="st">&quot;parking_underground&quot;</span><span class="op">|</span>parking<span class="op">$</span>fclass<span class="op">==</span><span class="st">&quot;parking_site&quot;</span>,] </span>
+<span id="cb239-2"><a href="statistical-correlation-analysis.html#cb239-2"></a></span>
+<span id="cb239-3"><a href="statistical-correlation-analysis.html#cb239-3"></a>parking_london &lt;-<span class="st"> </span><span class="kw">st_intersects</span>(londonwards, parking)</span>
+<span id="cb239-4"><a href="statistical-correlation-analysis.html#cb239-4"></a>londonparking &lt;-<span class="st"> </span>parking[<span class="kw">unlist</span>(parking_london),]</span></code></pre></div>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="statistical-correlation-analysis.html#cb240-1"></a>parking_ward &lt;-<span class="st"> </span>londonparking[londonwards,]</span>
+<span id="cb240-2"><a href="statistical-correlation-analysis.html#cb240-2"></a>parking_wards &lt;-<span class="st"> </span>londonwards<span class="op">%&gt;%</span></span>
+<span id="cb240-3"><a href="statistical-correlation-analysis.html#cb240-3"></a><span class="st">    </span><span class="kw">st_join</span>(parking_ward)<span class="op">%&gt;%</span></span>
+<span id="cb240-4"><a href="statistical-correlation-analysis.html#cb240-4"></a><span class="st">    </span><span class="kw">add_count</span>(NAME)<span class="op">%&gt;%</span></span>
+<span id="cb240-5"><a href="statistical-correlation-analysis.html#cb240-5"></a><span class="st">    </span>janitor<span class="op">::</span><span class="kw">clean_names</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb240-6"><a href="statistical-correlation-analysis.html#cb240-6"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">parking_density=</span>(n<span class="op">/</span>hectares)<span class="op">*</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb240-7"><a href="statistical-correlation-analysis.html#cb240-7"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(gss_code, parking_density) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb240-8"><a href="statistical-correlation-analysis.html#cb240-8"></a><span class="st">  </span><span class="kw">distinct</span>(., gss_code, <span class="dt">.keep_all =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="statistical-correlation-analysis.html#cb241-1"></a>allcharacter &lt;-<span class="st"> </span>allcharacter <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb241-2"><a href="statistical-correlation-analysis.html#cb241-2"></a><span class="st">  </span><span class="kw">left_join</span>(., parking_wards,</span>
+<span id="cb241-3"><a href="statistical-correlation-analysis.html#cb241-3"></a>            <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;gss_code&quot;</span> =<span class="st"> &quot;gss_code&quot;</span>)) </span></code></pre></div>
+</div>
+<div id="select-independent-variables" class="section level3">
+<h3><span class="header-section-number">4.2.7</span> Select independent variables</h3>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="statistical-correlation-analysis.html#cb242-1"></a><span class="kw">colnames</span>(allcharacter)</span></code></pre></div>
+<pre><code>##  [1] &quot;gss_code&quot;                &quot;old_code&quot;                &quot;pop_density&quot;            
+##  [4] &quot;road_incidents&quot;          &quot;employment_rate&quot;         &quot;houseprice&quot;             
+##  [7] &quot;car_ownership&quot;           &quot;publictransaccess_score&quot; &quot;density&quot;                
+## [10] &quot;percentage&quot;              &quot;wardname&quot;                &quot;chargepointcount&quot;       
+## [13] &quot;all_households&quot;          &quot;residential_percentage&quot;  &quot;road_percentage&quot;        
+## [16] &quot;rail_percentage&quot;         &quot;path_percentage&quot;         &quot;parking_density&quot;        
+## [19] &quot;geometry&quot;</code></pre>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="statistical-correlation-analysis.html#cb244-1"></a>allcharacter &lt;-<span class="st"> </span>allcharacter <span class="op">%&gt;%</span><span class="st">                    </span></span>
+<span id="cb244-2"><a href="statistical-correlation-analysis.html#cb244-2"></a><span class="st">    </span>dplyr<span class="op">::</span><span class="kw">select</span>(., <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">9</span>, <span class="dv">12</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">13</span>, <span class="dv">8</span>, <span class="dv">18</span>, <span class="dv">4</span>, <span class="dv">14</span>, <span class="dv">15</span>, <span class="dv">16</span>, <span class="dv">17</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="statistical-correlation-analysis.html#cb245-1"></a>characters &lt;-<span class="st"> </span>allcharacter <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb245-2"><a href="statistical-correlation-analysis.html#cb245-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">userate=</span>(car_ownership<span class="op">*</span>all_households)<span class="op">/</span>chargepointcount) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb245-3"><a href="statistical-correlation-analysis.html#cb245-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(., <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">16</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">9</span>,<span class="dv">10</span>,<span class="dv">11</span>,<span class="dv">12</span>,<span class="dv">13</span>,<span class="dv">14</span>,<span class="dv">15</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="statistical-correlation-analysis.html#cb246-1"></a><span class="kw">colnames</span>(characters)</span></code></pre></div>
+<pre><code>##  [1] &quot;gss_code&quot;                &quot;density&quot;                 &quot;userate&quot;                
+##  [4] &quot;pop_density&quot;             &quot;employment_rate&quot;         &quot;houseprice&quot;             
+##  [7] &quot;publictransaccess_score&quot; &quot;parking_density&quot;         &quot;road_incidents&quot;         
+## [10] &quot;residential_percentage&quot;  &quot;road_percentage&quot;         &quot;rail_percentage&quot;        
+## [13] &quot;path_percentage&quot;</code></pre>
+</div>
+<div id="save-all-characters.csv" class="section level3">
+<h3><span class="header-section-number">4.2.8</span> Save all characters.csv</h3>
+<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="statistical-correlation-analysis.html#cb248-1"></a><span class="kw">write.table</span>(points_wards,<span class="st">&quot;created datasets/characters.csv&quot;</span>,<span class="dt">row.names=</span><span class="ot">FALSE</span>,<span class="dt">col.names=</span><span class="ot">TRUE</span>,<span class="dt">sep=</span><span class="st">&quot;,&quot;</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="check-variable-distributions" class="section level2">
+<h2><span class="header-section-number">4.3</span> Check variable distributions</h2>
+<p>Ensure the variables could be normal distribution</p>
+<div id="variables" class="section level3">
+<h3><span class="header-section-number">4.3.1</span> Variables</h3>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="statistical-correlation-analysis.html#cb249-1"></a>p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span>density))<span class="op">+</span></span>
+<span id="cb249-2"><a href="statistical-correlation-analysis.html#cb249-2"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb249-3"><a href="statistical-correlation-analysis.html#cb249-3"></a>p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span>userate))<span class="op">+</span></span>
+<span id="cb249-4"><a href="statistical-correlation-analysis.html#cb249-4"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb249-5"><a href="statistical-correlation-analysis.html#cb249-5"></a>p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span>pop_density))<span class="op">+</span></span>
+<span id="cb249-6"><a href="statistical-correlation-analysis.html#cb249-6"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb249-7"><a href="statistical-correlation-analysis.html#cb249-7"></a>p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span>employment_rate))<span class="op">+</span></span>
+<span id="cb249-8"><a href="statistical-correlation-analysis.html#cb249-8"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb249-9"><a href="statistical-correlation-analysis.html#cb249-9"></a>p5 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span>houseprice))<span class="op">+</span></span>
+<span id="cb249-10"><a href="statistical-correlation-analysis.html#cb249-10"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb249-11"><a href="statistical-correlation-analysis.html#cb249-11"></a>p6 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span>publictransaccess_score))<span class="op">+</span></span>
+<span id="cb249-12"><a href="statistical-correlation-analysis.html#cb249-12"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb249-13"><a href="statistical-correlation-analysis.html#cb249-13"></a>p7 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span>parking_density))<span class="op">+</span></span>
+<span id="cb249-14"><a href="statistical-correlation-analysis.html#cb249-14"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb249-15"><a href="statistical-correlation-analysis.html#cb249-15"></a>p8 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span>road_incidents))<span class="op">+</span></span>
+<span id="cb249-16"><a href="statistical-correlation-analysis.html#cb249-16"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb249-17"><a href="statistical-correlation-analysis.html#cb249-17"></a>p9 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span>residential_percentage))<span class="op">+</span></span>
+<span id="cb249-18"><a href="statistical-correlation-analysis.html#cb249-18"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb249-19"><a href="statistical-correlation-analysis.html#cb249-19"></a>p10 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span>road_percentage))<span class="op">+</span></span>
+<span id="cb249-20"><a href="statistical-correlation-analysis.html#cb249-20"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb249-21"><a href="statistical-correlation-analysis.html#cb249-21"></a>p11 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span>rail_percentage))<span class="op">+</span></span>
+<span id="cb249-22"><a href="statistical-correlation-analysis.html#cb249-22"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb249-23"><a href="statistical-correlation-analysis.html#cb249-23"></a>p12 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span>path_percentage))<span class="op">+</span></span>
+<span id="cb249-24"><a href="statistical-correlation-analysis.html#cb249-24"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span></code></pre></div>
+</div>
+<div id="plot-variable-distribution" class="section level3">
+<h3><span class="header-section-number">4.3.2</span> Plot variable distribution</h3>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="statistical-correlation-analysis.html#cb250-1"></a><span class="kw">multiplot</span>(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, <span class="dt">cols =</span> <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre><code>## Warning: Removed 1 rows containing non-finite values (stat_bin).</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="bookdownproj_files/figure-html/unnamed-chunk-69-1.png" width="672" /></p>
+</div>
+<div id="plot-logvariable-distribution" class="section level3">
+<h3><span class="header-section-number">4.3.3</span> Plot log(variable) distribution</h3>
+<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb254-1"><a href="statistical-correlation-analysis.html#cb254-1"></a>lp1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">log</span>(density)))<span class="op">+</span></span>
+<span id="cb254-2"><a href="statistical-correlation-analysis.html#cb254-2"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb254-3"><a href="statistical-correlation-analysis.html#cb254-3"></a>lp2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">log</span>(userate)))<span class="op">+</span></span>
+<span id="cb254-4"><a href="statistical-correlation-analysis.html#cb254-4"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb254-5"><a href="statistical-correlation-analysis.html#cb254-5"></a>lp3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">log</span>(pop_density)))<span class="op">+</span></span>
+<span id="cb254-6"><a href="statistical-correlation-analysis.html#cb254-6"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb254-7"><a href="statistical-correlation-analysis.html#cb254-7"></a>lp4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">log</span>(employment_rate)))<span class="op">+</span></span>
+<span id="cb254-8"><a href="statistical-correlation-analysis.html#cb254-8"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb254-9"><a href="statistical-correlation-analysis.html#cb254-9"></a>lp5 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">log</span>(houseprice)))<span class="op">+</span></span>
+<span id="cb254-10"><a href="statistical-correlation-analysis.html#cb254-10"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb254-11"><a href="statistical-correlation-analysis.html#cb254-11"></a>lp6 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">log</span>(publictransaccess_score)))<span class="op">+</span></span>
+<span id="cb254-12"><a href="statistical-correlation-analysis.html#cb254-12"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb254-13"><a href="statistical-correlation-analysis.html#cb254-13"></a>lp7 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">log</span>(parking_density)))<span class="op">+</span></span>
+<span id="cb254-14"><a href="statistical-correlation-analysis.html#cb254-14"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb254-15"><a href="statistical-correlation-analysis.html#cb254-15"></a>lp8 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">log</span>(road_incidents)))<span class="op">+</span></span>
+<span id="cb254-16"><a href="statistical-correlation-analysis.html#cb254-16"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb254-17"><a href="statistical-correlation-analysis.html#cb254-17"></a>lp9 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">log</span>(residential_percentage)))<span class="op">+</span></span>
+<span id="cb254-18"><a href="statistical-correlation-analysis.html#cb254-18"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb254-19"><a href="statistical-correlation-analysis.html#cb254-19"></a>lp10 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">log</span>(road_percentage)))<span class="op">+</span></span>
+<span id="cb254-20"><a href="statistical-correlation-analysis.html#cb254-20"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb254-21"><a href="statistical-correlation-analysis.html#cb254-21"></a>lp11 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">log</span>(rail_percentage)))<span class="op">+</span></span>
+<span id="cb254-22"><a href="statistical-correlation-analysis.html#cb254-22"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span>
+<span id="cb254-23"><a href="statistical-correlation-analysis.html#cb254-23"></a>lp12 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>characters, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">log</span>(path_percentage)))<span class="op">+</span></span>
+<span id="cb254-24"><a href="statistical-correlation-analysis.html#cb254-24"></a><span class="st">  </span><span class="kw">geom_histogram</span>()</span></code></pre></div>
+</div>
+<div id="plot-logvariable-distribution-1" class="section level3">
+<h3><span class="header-section-number">4.3.4</span> Plot log(variable) distribution</h3>
+<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="statistical-correlation-analysis.html#cb255-1"></a><span class="kw">multiplot</span>(lp1, lp2, lp3, lp4, lp5, lp6, lp7, lp8, lp9, lp10, lp11, lp12, <span class="dt">cols =</span> <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre><code>## Warning: Removed 50 rows containing non-finite values (stat_bin).</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre><code>## Warning: Removed 179 rows containing non-finite values (stat_bin).</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="bookdownproj_files/figure-html/unnamed-chunk-71-1.png" width="672" /></p>
+</div>
+<div id="plot-normal-distribution" class="section level3">
+<h3><span class="header-section-number">4.3.5</span> Plot normal distribution</h3>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="statistical-correlation-analysis.html#cb261-1"></a><span class="kw">multiplot</span>(lp1, lp2, p3, p4, lp5, lp6, lp7, p9, p10, <span class="dt">cols =</span> <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="bookdownproj_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
+</div>
+<div id="independent-variables" class="section level3">
+<h3><span class="header-section-number">4.3.6</span> Independent variables</h3>
+<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="statistical-correlation-analysis.html#cb263-1"></a>independent &lt;-<span class="st"> </span>characters <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb263-2"><a href="statistical-correlation-analysis.html#cb263-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(., <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">11</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="statistical-correlation-analysis.html#cb264-1"></a><span class="kw">colnames</span>(independent)</span></code></pre></div>
+<pre><code>## [1] &quot;gss_code&quot;                &quot;density&quot;                 &quot;userate&quot;                
+## [4] &quot;employment_rate&quot;         &quot;houseprice&quot;              &quot;publictransaccess_score&quot;
+## [7] &quot;parking_density&quot;         &quot;residential_percentage&quot;  &quot;road_percentage&quot;</code></pre>
+</div>
+</div>
+<div id="correlation-analysis" class="section level2">
+<h2><span class="header-section-number">4.4</span> Correlation analysis</h2>
+<div id="correlationship-of-userate-public-transit-of-charge-points-in-london" class="section level3">
+<h3><span class="header-section-number">4.4.1</span> Correlationship of userate &amp; public transit of charge points in London</h3>
+<p>Remove possible outliers and plot the correlationship between these variables, comparing the charging density case and use rate case and finding the overall relationship.</p>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="statistical-correlation-analysis.html#cb266-1"></a>qu1 &lt;-<span class="st"> </span><span class="kw">qplot</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">employment_rate</span><span class="st">`</span>, </span>
+<span id="cb266-2"><a href="statistical-correlation-analysis.html#cb266-2"></a>             <span class="dt">y =</span> <span class="st">`</span><span class="dt">userate</span><span class="st">`</span>, </span>
+<span id="cb266-3"><a href="statistical-correlation-analysis.html#cb266-3"></a>             <span class="dt">data=</span>independent, </span>
+<span id="cb266-4"><a href="statistical-correlation-analysis.html#cb266-4"></a>             <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">50</span>, <span class="dv">85</span>))</span>
+<span id="cb266-5"><a href="statistical-correlation-analysis.html#cb266-5"></a></span>
+<span id="cb266-6"><a href="statistical-correlation-analysis.html#cb266-6"></a><span class="co">#plot with a regression line</span></span>
+<span id="cb266-7"><a href="statistical-correlation-analysis.html#cb266-7"></a>qu1 &lt;-<span class="st"> </span>qu1 <span class="op">+</span><span class="st"> </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">size=</span><span class="dv">1</span>)</span>
+<span id="cb266-8"><a href="statistical-correlation-analysis.html#cb266-8"></a>qd1 &lt;-<span class="st"> </span><span class="kw">qplot</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">employment_rate</span><span class="st">`</span>, </span>
+<span id="cb266-9"><a href="statistical-correlation-analysis.html#cb266-9"></a>             <span class="dt">y =</span> <span class="st">`</span><span class="dt">density</span><span class="st">`</span>, </span>
+<span id="cb266-10"><a href="statistical-correlation-analysis.html#cb266-10"></a>             <span class="dt">data=</span>independent, </span>
+<span id="cb266-11"><a href="statistical-correlation-analysis.html#cb266-11"></a>             <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">50</span>, <span class="dv">85</span>))</span>
+<span id="cb266-12"><a href="statistical-correlation-analysis.html#cb266-12"></a></span>
+<span id="cb266-13"><a href="statistical-correlation-analysis.html#cb266-13"></a><span class="co">#plot with a regression line</span></span>
+<span id="cb266-14"><a href="statistical-correlation-analysis.html#cb266-14"></a>qd1 &lt;-<span class="st"> </span>qd1 <span class="op">+</span><span class="st"> </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">size=</span><span class="dv">1</span>)</span>
+<span id="cb266-15"><a href="statistical-correlation-analysis.html#cb266-15"></a><span class="kw">multiplot</span>(qd1, qu1, <span class="dt">cols =</span> <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_smooth).
+
+## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
+<p><img src="bookdownproj_files/figure-html/unnamed-chunk-75-1.png" width="672" /></p>
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="statistical-correlation-analysis.html#cb272-1"></a>qu2 &lt;-<span class="st"> </span><span class="kw">qplot</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">houseprice</span><span class="st">`</span>, </span>
+<span id="cb272-2"><a href="statistical-correlation-analysis.html#cb272-2"></a>             <span class="dt">y =</span> <span class="st">`</span><span class="dt">userate</span><span class="st">`</span>, </span>
+<span id="cb272-3"><a href="statistical-correlation-analysis.html#cb272-3"></a>             <span class="dt">data=</span>independent, </span>
+<span id="cb272-4"><a href="statistical-correlation-analysis.html#cb272-4"></a>             <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">250000</span>, <span class="dv">800000</span>))</span>
+<span id="cb272-5"><a href="statistical-correlation-analysis.html#cb272-5"></a></span>
+<span id="cb272-6"><a href="statistical-correlation-analysis.html#cb272-6"></a><span class="co">#plot with a regression line</span></span>
+<span id="cb272-7"><a href="statistical-correlation-analysis.html#cb272-7"></a>qu2 &lt;-<span class="st"> </span>qu2 <span class="op">+</span><span class="st"> </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">size=</span><span class="dv">1</span>) </span>
+<span id="cb272-8"><a href="statistical-correlation-analysis.html#cb272-8"></a>qd2 &lt;-<span class="st"> </span><span class="kw">qplot</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">houseprice</span><span class="st">`</span>, </span>
+<span id="cb272-9"><a href="statistical-correlation-analysis.html#cb272-9"></a>             <span class="dt">y =</span> <span class="st">`</span><span class="dt">density</span><span class="st">`</span>,</span>
+<span id="cb272-10"><a href="statistical-correlation-analysis.html#cb272-10"></a>             <span class="dt">data=</span>independent,</span>
+<span id="cb272-11"><a href="statistical-correlation-analysis.html#cb272-11"></a>             <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">250000</span>, <span class="dv">800000</span>))</span>
+<span id="cb272-12"><a href="statistical-correlation-analysis.html#cb272-12"></a></span>
+<span id="cb272-13"><a href="statistical-correlation-analysis.html#cb272-13"></a><span class="co">#plot with a regression line</span></span>
+<span id="cb272-14"><a href="statistical-correlation-analysis.html#cb272-14"></a>qd2 &lt;-<span class="st"> </span>qd2 <span class="op">+</span><span class="st"> </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">size=</span><span class="dv">1</span>) </span>
+<span id="cb272-15"><a href="statistical-correlation-analysis.html#cb272-15"></a><span class="kw">multiplot</span>(qd2, qu2, <span class="dt">cols =</span> <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 119 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 119 rows containing missing values (geom_point).</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 119 rows containing non-finite values (stat_smooth).
+
+## Warning: Removed 119 rows containing missing values (geom_point).</code></pre>
+<p><img src="bookdownproj_files/figure-html/unnamed-chunk-76-1.png" width="672" /></p>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="statistical-correlation-analysis.html#cb278-1"></a>qu3 &lt;-<span class="st"> </span><span class="kw">qplot</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">publictransaccess_score</span><span class="st">`</span>, </span>
+<span id="cb278-2"><a href="statistical-correlation-analysis.html#cb278-2"></a>             <span class="dt">y =</span> <span class="st">`</span><span class="dt">userate</span><span class="st">`</span>, </span>
+<span id="cb278-3"><a href="statistical-correlation-analysis.html#cb278-3"></a>             <span class="dt">data=</span>independent)</span>
+<span id="cb278-4"><a href="statistical-correlation-analysis.html#cb278-4"></a></span>
+<span id="cb278-5"><a href="statistical-correlation-analysis.html#cb278-5"></a><span class="co">#plot with a regression line</span></span>
+<span id="cb278-6"><a href="statistical-correlation-analysis.html#cb278-6"></a>qu3 &lt;-<span class="st"> </span>qu3 <span class="op">+</span><span class="st"> </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">size=</span><span class="dv">1</span>) </span>
+<span id="cb278-7"><a href="statistical-correlation-analysis.html#cb278-7"></a>qd3 &lt;-<span class="st"> </span><span class="kw">qplot</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">publictransaccess_score</span><span class="st">`</span>, </span>
+<span id="cb278-8"><a href="statistical-correlation-analysis.html#cb278-8"></a>             <span class="dt">y =</span> <span class="st">`</span><span class="dt">density</span><span class="st">`</span>, </span>
+<span id="cb278-9"><a href="statistical-correlation-analysis.html#cb278-9"></a>             <span class="dt">data=</span>independent)</span>
+<span id="cb278-10"><a href="statistical-correlation-analysis.html#cb278-10"></a></span>
+<span id="cb278-11"><a href="statistical-correlation-analysis.html#cb278-11"></a><span class="co">#plot with a regression line</span></span>
+<span id="cb278-12"><a href="statistical-correlation-analysis.html#cb278-12"></a>qd3 &lt;-<span class="st"> </span>qd3 <span class="op">+</span><span class="st"> </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">size=</span><span class="dv">1</span>)</span>
+<span id="cb278-13"><a href="statistical-correlation-analysis.html#cb278-13"></a><span class="kw">multiplot</span>(qd3, qu3, <span class="dt">cols =</span> <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;
+## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="bookdownproj_files/figure-html/unnamed-chunk-77-1.png" width="672" /></p>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="statistical-correlation-analysis.html#cb280-1"></a>qu4 &lt;-<span class="st"> </span><span class="kw">qplot</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">parking_density</span><span class="st">`</span>, </span>
+<span id="cb280-2"><a href="statistical-correlation-analysis.html#cb280-2"></a>             <span class="dt">y =</span> <span class="st">`</span><span class="dt">userate</span><span class="st">`</span>, </span>
+<span id="cb280-3"><a href="statistical-correlation-analysis.html#cb280-3"></a>             <span class="dt">data=</span>independent,</span>
+<span id="cb280-4"><a href="statistical-correlation-analysis.html#cb280-4"></a>             <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">500</span>))</span>
+<span id="cb280-5"><a href="statistical-correlation-analysis.html#cb280-5"></a></span>
+<span id="cb280-6"><a href="statistical-correlation-analysis.html#cb280-6"></a><span class="co">#plot with a regression line</span></span>
+<span id="cb280-7"><a href="statistical-correlation-analysis.html#cb280-7"></a>qu4 &lt;-<span class="st"> </span>qu4 <span class="op">+</span><span class="st"> </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">size=</span><span class="dv">1</span>)</span>
+<span id="cb280-8"><a href="statistical-correlation-analysis.html#cb280-8"></a>qd4 &lt;-<span class="st"> </span><span class="kw">qplot</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">parking_density</span><span class="st">`</span>, </span>
+<span id="cb280-9"><a href="statistical-correlation-analysis.html#cb280-9"></a>             <span class="dt">y =</span> <span class="st">`</span><span class="dt">density</span><span class="st">`</span>, </span>
+<span id="cb280-10"><a href="statistical-correlation-analysis.html#cb280-10"></a>             <span class="dt">data=</span>independent,</span>
+<span id="cb280-11"><a href="statistical-correlation-analysis.html#cb280-11"></a>             <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">500</span>))</span>
+<span id="cb280-12"><a href="statistical-correlation-analysis.html#cb280-12"></a></span>
+<span id="cb280-13"><a href="statistical-correlation-analysis.html#cb280-13"></a><span class="co">#plot with a regression line</span></span>
+<span id="cb280-14"><a href="statistical-correlation-analysis.html#cb280-14"></a>qd4 &lt;-<span class="st"> </span>qd4 <span class="op">+</span><span class="st"> </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">size=</span><span class="dv">1</span>)</span>
+<span id="cb280-15"><a href="statistical-correlation-analysis.html#cb280-15"></a><span class="kw">multiplot</span>(qd4, qu4, <span class="dt">cols =</span> <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 6 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 6 rows containing missing values (geom_point).</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## Warning: Removed 6 rows containing non-finite values (stat_smooth).
+
+## Warning: Removed 6 rows containing missing values (geom_point).</code></pre>
+<p><img src="bookdownproj_files/figure-html/unnamed-chunk-78-1.png" width="672" /></p>
+<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb286-1"><a href="statistical-correlation-analysis.html#cb286-1"></a>qu5 &lt;-<span class="st"> </span><span class="kw">qplot</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">residential_percentage</span><span class="st">`</span>, </span>
+<span id="cb286-2"><a href="statistical-correlation-analysis.html#cb286-2"></a>             <span class="dt">y =</span> <span class="st">`</span><span class="dt">userate</span><span class="st">`</span>, </span>
+<span id="cb286-3"><a href="statistical-correlation-analysis.html#cb286-3"></a>             <span class="dt">data=</span>independent)</span>
+<span id="cb286-4"><a href="statistical-correlation-analysis.html#cb286-4"></a></span>
+<span id="cb286-5"><a href="statistical-correlation-analysis.html#cb286-5"></a><span class="co">#plot with a regression line</span></span>
+<span id="cb286-6"><a href="statistical-correlation-analysis.html#cb286-6"></a>qu5 &lt;-<span class="st"> </span>qu5 <span class="op">+</span><span class="st"> </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">size=</span><span class="dv">1</span>)</span>
+<span id="cb286-7"><a href="statistical-correlation-analysis.html#cb286-7"></a>qd5 &lt;-<span class="st"> </span><span class="kw">qplot</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">residential_percentage</span><span class="st">`</span>, </span>
+<span id="cb286-8"><a href="statistical-correlation-analysis.html#cb286-8"></a>             <span class="dt">y =</span> <span class="st">`</span><span class="dt">density</span><span class="st">`</span>, </span>
+<span id="cb286-9"><a href="statistical-correlation-analysis.html#cb286-9"></a>             <span class="dt">data=</span>independent)</span>
+<span id="cb286-10"><a href="statistical-correlation-analysis.html#cb286-10"></a></span>
+<span id="cb286-11"><a href="statistical-correlation-analysis.html#cb286-11"></a><span class="co">#plot with a regression line</span></span>
+<span id="cb286-12"><a href="statistical-correlation-analysis.html#cb286-12"></a>qd5 &lt;-<span class="st"> </span>qd5 <span class="op">+</span><span class="st"> </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">size=</span><span class="dv">1</span>)</span>
+<span id="cb286-13"><a href="statistical-correlation-analysis.html#cb286-13"></a><span class="kw">multiplot</span>(qd5, qu5, <span class="dt">cols =</span> <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;
+## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="bookdownproj_files/figure-html/unnamed-chunk-79-1.png" width="672" /></p>
+<div class="sourceCode" id="cb288"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb288-1"><a href="statistical-correlation-analysis.html#cb288-1"></a>qu6 &lt;-<span class="st"> </span><span class="kw">qplot</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">road_percentage</span><span class="st">`</span>, </span>
+<span id="cb288-2"><a href="statistical-correlation-analysis.html#cb288-2"></a>             <span class="dt">y =</span> <span class="st">`</span><span class="dt">userate</span><span class="st">`</span>, </span>
+<span id="cb288-3"><a href="statistical-correlation-analysis.html#cb288-3"></a>             <span class="dt">data=</span>independent)</span>
+<span id="cb288-4"><a href="statistical-correlation-analysis.html#cb288-4"></a></span>
+<span id="cb288-5"><a href="statistical-correlation-analysis.html#cb288-5"></a><span class="co">#plot with a regression line</span></span>
+<span id="cb288-6"><a href="statistical-correlation-analysis.html#cb288-6"></a>qu6 &lt;-<span class="st"> </span>qu6 <span class="op">+</span><span class="st"> </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">size=</span><span class="dv">1</span>)</span>
+<span id="cb288-7"><a href="statistical-correlation-analysis.html#cb288-7"></a>qd6 &lt;-<span class="st"> </span><span class="kw">qplot</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">road_percentage</span><span class="st">`</span>, </span>
+<span id="cb288-8"><a href="statistical-correlation-analysis.html#cb288-8"></a>             <span class="dt">y =</span> <span class="st">`</span><span class="dt">density</span><span class="st">`</span>, </span>
+<span id="cb288-9"><a href="statistical-correlation-analysis.html#cb288-9"></a>             <span class="dt">data=</span>independent)</span>
+<span id="cb288-10"><a href="statistical-correlation-analysis.html#cb288-10"></a></span>
+<span id="cb288-11"><a href="statistical-correlation-analysis.html#cb288-11"></a><span class="co">#plot with a regression line</span></span>
+<span id="cb288-12"><a href="statistical-correlation-analysis.html#cb288-12"></a>qd6 &lt;-<span class="st"> </span>qd6 <span class="op">+</span><span class="st"> </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">size=</span><span class="dv">1</span>)</span>
+<span id="cb288-13"><a href="statistical-correlation-analysis.html#cb288-13"></a><span class="kw">multiplot</span>(qd6, qu6, <span class="dt">cols =</span> <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;
+## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="bookdownproj_files/figure-html/unnamed-chunk-80-1.png" width="672" /></p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="spatial-autocorrelation-analysis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="regression-analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/AnniHuo/test1/edit/master/04-correlation-analysis.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/AnniHuo/test1/blob/master/04-correlation-analysis.Rmd",
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
