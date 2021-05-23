@@ -1,4 +1,4 @@
-This is the document of the CASA0005 assignment. 
+This is the document of the CASA0005 assignment:
 https://annihuo.github.io/casa_project/
 
 
